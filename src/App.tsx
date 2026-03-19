@@ -10,6 +10,7 @@ import SessionSetup from "./pages/SessionSetup";
 import ActiveSession from "./pages/ActiveSession";
 import Education from "./pages/Education";
 import Dashboard from "./pages/Dashboard";
+import Report from "./pages/Report";
 import SettingsPage from "./pages/SettingsPage";
 import NotFound from "./pages/NotFound";
 
@@ -29,6 +30,7 @@ const App = () => (
               <Route path="/active-session" element={<ActiveSession />} />
               <Route path="/education" element={<Education />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/report" element={<Report />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

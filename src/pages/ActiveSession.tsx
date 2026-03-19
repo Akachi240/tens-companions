@@ -3,6 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { StopCircle, Clock, Pause, Play } from "lucide-react";
 import { useProfile } from "@/context/ProfileContext";
 
+function getReliefBadge(percentage: number) {
+  if (percentage <= 25) return { label: "Mild Relief", className: "bg-destructive/10 text-destructive" };
+  if (percentage <= 50) return { label: "Moderate Relief", className: "bg-medical-warning/10 text-medical-warning" };
+  return { label: "Excellent Relief", className: "bg-medical-emerald/10 text-medical-emerald" };
+}
+
 export default function ActiveSession() {
   const navigate = useNavigate();
   const { activeProfile, addSession } = useProfile();
@@ -50,7 +56,7 @@ export default function ActiveSession() {
   const mins = Math.floor(remaining / 60);
   const secs = remaining % 60;
 
-  // Breathing cycle: 8s total (2s inhale, 2s hold, 2s exhale, 2s hold)
+  // Breathing cycle
   const [breathPhase, setBreathPhase] = useState("Inhale");
   useEffect(() => {
     if (!running || paused) return;
@@ -62,6 +68,13 @@ export default function ActiveSession() {
     }, 2000);
     return () => clearInterval(t);
   }, [running, paused]);
+
+  const painReductionPercentage =
+    config?.initialPain > 0
+      ? Math.round(((config.initialPain - finalPain) / config.initialPain) * 100)
+      : 0;
+
+  const relief = getReliefBadge(Math.max(0, painReductionPercentage));
 
   const saveSession = () => {
     if (!config || !activeProfile) {
@@ -80,6 +93,8 @@ export default function ActiveSession() {
       },
       initialPain: config.initialPain,
       finalPain,
+      duration: config.duration,
+      painReductionPercentage: Math.max(0, painReductionPercentage),
       patientNotes: notes,
     });
     sessionStorage.removeItem("tens-active-session");
@@ -121,6 +136,19 @@ export default function ActiveSession() {
             <span>10 — Worst Pain</span>
           </div>
 
+          {/* Relief Badge */}
+          <div className="mb-6">
+            <p className="text-sm text-muted-foreground mb-2">Pain Reduction</p>
+            <div className="flex items-center justify-center gap-3">
+              <span className="text-2xl font-display font-bold text-foreground">
+                {painReductionPercentage > 0 ? painReductionPercentage : 0}%
+              </span>
+              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${relief.className}`}>
+                {painReductionPercentage > 0 ? relief.label : "No Relief"}
+              </span>
+            </div>
+          </div>
+
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
@@ -142,7 +170,6 @@ export default function ActiveSession() {
   return (
     <div className="container max-w-lg py-16">
       <div className="medical-card-elevated text-center">
-        {/* Timer */}
         <div className="flex items-center justify-center gap-2 text-muted-foreground mb-2">
           <Clock className="h-4 w-4" />
           <span className="text-sm font-medium">{config.placement} • {config.painType}</span>
@@ -154,7 +181,6 @@ export default function ActiveSession() {
           {config.frequency} Hz · {config.pulseWidth} μs · {config.intensity} mA
         </p>
 
-        {/* Breathing */}
         <div className="mt-10 mb-8 flex flex-col items-center">
           <div
             className={`w-28 h-28 rounded-full gradient-medical-bg flex items-center justify-center ${
@@ -168,7 +194,6 @@ export default function ActiveSession() {
           <p className="text-xs text-muted-foreground mt-3">Box Breathing — follow the rhythm</p>
         </div>
 
-        {/* Pause / Resume */}
         <button
           onClick={togglePause}
           className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-border text-foreground font-semibold text-base hover:bg-muted transition mb-3"
@@ -177,7 +202,6 @@ export default function ActiveSession() {
           {paused ? "Resume" : "Pause"}
         </button>
 
-        {/* Emergency Stop */}
         <button
           onClick={stopSession}
           className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-destructive text-destructive-foreground font-bold text-lg hover:opacity-90 transition"

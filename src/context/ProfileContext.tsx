@@ -12,6 +12,8 @@ export interface SessionRecord {
   };
   initialPain: number;
   finalPain: number;
+  duration: number;
+  painReductionPercentage: number;
   patientNotes: string;
 }
 
