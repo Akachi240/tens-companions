@@ -1,6 +1,6 @@
 import { useProfile } from "@/context/ProfileContext";
-import { BarChart3, TrendingDown, FileText, CalendarDays } from "lucide-react";
-import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { BarChart3, TrendingDown, FileText, CalendarDays, MapPin, Zap } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -14,7 +14,7 @@ import {
 
 export default function Dashboard() {
   const { activeProfile } = useProfile();
-  const printRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const sessions = activeProfile?.sessionHistory || [];
   const totalSessions = sessions.length;
@@ -25,16 +25,37 @@ export default function Dashboard() {
         ).toFixed(1)
       : "—";
 
-  const chartData = sessions.map((s, i) => ({
+  const chartData = sessions.map((s) => ({
     name: new Date(s.date).toLocaleDateString(),
     "Initial Pain": s.initialPain,
     "Final Pain": s.finalPain,
-    index: i,
   }));
 
-  const handleExport = () => {
-    window.print();
-  };
+  // Therapy Insights
+  const mostTreatedLocation = (() => {
+    if (sessions.length === 0) return "—";
+    const counts: Record<string, number> = {};
+    sessions.forEach((s) => { counts[s.placement] = (counts[s.placement] || 0) + 1; });
+    return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
+  })();
+
+  const mostEffectiveMode = (() => {
+    if (sessions.length === 0) return "—";
+    const modeStats: Record<string, { total: number; count: number }> = {};
+    sessions.forEach((s) => {
+      const mode = s.painType === "Acute" ? "Conventional TENS" : "Acupuncture-like TENS";
+      if (!modeStats[mode]) modeStats[mode] = { total: 0, count: 0 };
+      modeStats[mode].total += (s.painReductionPercentage ?? 0);
+      modeStats[mode].count += 1;
+    });
+    let best = "—";
+    let bestAvg = -1;
+    Object.entries(modeStats).forEach(([mode, { total, count }]) => {
+      const avg = total / count;
+      if (avg > bestAvg) { bestAvg = avg; best = mode; }
+    });
+    return best;
+  })();
 
   if (!activeProfile) {
     return (
@@ -45,31 +66,22 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="container max-w-4xl py-10" ref={printRef}>
-      <div className="flex items-center justify-between mb-8 no-print">
+    <div className="container max-w-4xl py-10">
+      <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="font-display text-3xl font-bold text-foreground">Dashboard</h1>
           <p className="text-muted-foreground">{activeProfile.name}'s therapy overview</p>
         </div>
         <button
-          onClick={handleExport}
+          onClick={() => navigate("/report")}
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl gradient-medical-bg text-primary-foreground font-semibold hover:opacity-90 transition"
         >
           <FileText className="h-4 w-4" /> Export Doctor's Report
         </button>
       </div>
 
-      {/* Print header */}
-      <div className="hidden print:block mb-6">
-        <h1 className="text-2xl font-bold">TENS Companion — Doctor's Report</h1>
-        <p>Patient: {activeProfile.name} | Condition: {activeProfile.primaryCondition}</p>
-        <p>Medications: {activeProfile.medications.join(", ") || "None listed"}</p>
-        <p>Generated: {new Date().toLocaleDateString()}</p>
-        <hr className="my-4" />
-      </div>
-
       {/* Stats */}
-      <div className="grid sm:grid-cols-3 gap-4 mb-8">
+      <div className="grid sm:grid-cols-3 gap-4 mb-6">
         <StatCard icon={BarChart3} label="Total Sessions" value={String(totalSessions)} />
         <StatCard icon={TrendingDown} label="Avg Pain Reduction" value={avgReduction + " pts"} />
         <StatCard
@@ -83,6 +95,33 @@ export default function Dashboard() {
         />
       </div>
 
+      {/* Therapy Insights */}
+      {sessions.length > 0 && (
+        <div className="medical-card-elevated mb-8">
+          <h2 className="font-display text-lg font-bold text-foreground mb-4">Therapy Insights</h2>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="flex items-center gap-3 p-4 rounded-xl bg-secondary border border-border">
+              <div className="p-2.5 rounded-lg bg-primary/10 text-primary">
+                <MapPin className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Most Treated Location</p>
+                <p className="text-base font-display font-bold text-foreground">{mostTreatedLocation}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 p-4 rounded-xl bg-secondary border border-border">
+              <div className="p-2.5 rounded-lg bg-accent/10 text-accent">
+                <Zap className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Most Effective Mode</p>
+                <p className="text-base font-display font-bold text-foreground">{mostEffectiveMode}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Pain Trend Chart */}
       {chartData.length > 0 && (
         <div className="medical-card-elevated mb-8">
@@ -95,20 +134,8 @@ export default function Dashboard() {
                 <YAxis domain={[0, 10]} tick={{ fontSize: 12 }} stroke="hsl(210 10% 50%)" />
                 <Tooltip />
                 <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="Initial Pain"
-                  stroke="hsl(0 72% 51%)"
-                  strokeWidth={2}
-                  dot={{ r: 4 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="Final Pain"
-                  stroke="hsl(173 58% 39%)"
-                  strokeWidth={2}
-                  dot={{ r: 4 }}
-                />
+                <Line type="monotone" dataKey="Initial Pain" stroke="hsl(0 72% 51%)" strokeWidth={2} dot={{ r: 4 }} />
+                <Line type="monotone" dataKey="Final Pain" stroke="hsl(173 58% 39%)" strokeWidth={2} dot={{ r: 4 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -130,6 +157,7 @@ export default function Dashboard() {
                   <th className="pb-3 font-medium text-muted-foreground">Type</th>
                   <th className="pb-3 font-medium text-muted-foreground">Pain Before</th>
                   <th className="pb-3 font-medium text-muted-foreground">Pain After</th>
+                  <th className="pb-3 font-medium text-muted-foreground">Relief</th>
                   <th className="pb-3 font-medium text-muted-foreground">Notes</th>
                 </tr>
               </thead>
@@ -147,6 +175,7 @@ export default function Dashboard() {
                     </td>
                     <td className="py-3 text-foreground">{s.initialPain}/10</td>
                     <td className="py-3 text-foreground">{s.finalPain}/10</td>
+                    <td className="py-3 text-foreground">{s.painReductionPercentage ?? "—"}%</td>
                     <td className="py-3 text-muted-foreground max-w-[200px] truncate">{s.patientNotes || "—"}</td>
                   </tr>
                 ))}
