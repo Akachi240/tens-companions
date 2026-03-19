@@ -1,6 +1,16 @@
 import { useProfile } from "@/context/ProfileContext";
 import { BarChart3, TrendingDown, FileText, CalendarDays } from "lucide-react";
 import { useRef } from "react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 export default function Dashboard() {
   const { activeProfile } = useProfile();
@@ -14,6 +24,13 @@ export default function Dashboard() {
           sessions.reduce((sum, s) => sum + (s.initialPain - s.finalPain), 0) / totalSessions
         ).toFixed(1)
       : "—";
+
+  const chartData = sessions.map((s, i) => ({
+    name: new Date(s.date).toLocaleDateString(),
+    "Initial Pain": s.initialPain,
+    "Final Pain": s.finalPain,
+    index: i,
+  }));
 
   const handleExport = () => {
     window.print();
@@ -65,6 +82,38 @@ export default function Dashboard() {
           }
         />
       </div>
+
+      {/* Pain Trend Chart */}
+      {chartData.length > 0 && (
+        <div className="medical-card-elevated mb-8">
+          <h2 className="font-display text-lg font-bold text-foreground mb-4">Pain Trend</h2>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(210 18% 90%)" />
+                <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="hsl(210 10% 50%)" />
+                <YAxis domain={[0, 10]} tick={{ fontSize: 12 }} stroke="hsl(210 10% 50%)" />
+                <Tooltip />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="Initial Pain"
+                  stroke="hsl(0 72% 51%)"
+                  strokeWidth={2}
+                  dot={{ r: 4 }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="Final Pain"
+                  stroke="hsl(173 58% 39%)"
+                  strokeWidth={2}
+                  dot={{ r: 4 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
 
       {/* Session History */}
       <div className="medical-card-elevated">
