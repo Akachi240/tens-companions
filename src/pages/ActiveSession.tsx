@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { StopCircle, Clock } from "lucide-react";
+import { StopCircle, Clock, Pause, Play } from "lucide-react";
 import { useProfile } from "@/context/ProfileContext";
 
 export default function ActiveSession() {
@@ -13,6 +13,7 @@ export default function ActiveSession() {
   const totalSeconds = (config?.duration || 30) * 60;
   const [remaining, setRemaining] = useState(totalSeconds);
   const [running, setRunning] = useState(true);
+  const [paused, setPaused] = useState(false);
   const [showPost, setShowPost] = useState(false);
   const [finalPain, setFinalPain] = useState(5);
   const [notes, setNotes] = useState("");
@@ -20,12 +21,20 @@ export default function ActiveSession() {
 
   const stopSession = useCallback(() => {
     setRunning(false);
+    setPaused(false);
     clearInterval(intervalRef.current);
     setShowPost(true);
   }, []);
 
+  const togglePause = () => {
+    setPaused((p) => !p);
+  };
+
   useEffect(() => {
-    if (!running) return;
+    if (!running || paused) {
+      clearInterval(intervalRef.current);
+      return;
+    }
     intervalRef.current = setInterval(() => {
       setRemaining((r) => {
         if (r <= 1) {
@@ -36,7 +45,7 @@ export default function ActiveSession() {
       });
     }, 1000);
     return () => clearInterval(intervalRef.current);
-  }, [running, stopSession]);
+  }, [running, paused, stopSession]);
 
   const mins = Math.floor(remaining / 60);
   const secs = remaining % 60;
@@ -44,7 +53,7 @@ export default function ActiveSession() {
   // Breathing cycle: 8s total (2s inhale, 2s hold, 2s exhale, 2s hold)
   const [breathPhase, setBreathPhase] = useState("Inhale");
   useEffect(() => {
-    if (!running) return;
+    if (!running || paused) return;
     const phases = ["Inhale", "Hold", "Exhale", "Hold"];
     let i = 0;
     const t = setInterval(() => {
@@ -52,7 +61,7 @@ export default function ActiveSession() {
       setBreathPhase(phases[i]);
     }, 2000);
     return () => clearInterval(t);
-  }, [running]);
+  }, [running, paused]);
 
   const saveSession = () => {
     if (!config || !activeProfile) {
@@ -147,11 +156,26 @@ export default function ActiveSession() {
 
         {/* Breathing */}
         <div className="mt-10 mb-8 flex flex-col items-center">
-          <div className="breathing-circle w-28 h-28 rounded-full gradient-medical-bg flex items-center justify-center">
-            <span className="text-primary-foreground font-semibold text-sm">{breathPhase}</span>
+          <div
+            className={`w-28 h-28 rounded-full gradient-medical-bg flex items-center justify-center ${
+              paused ? "" : "breathing-circle"
+            }`}
+          >
+            <span className="text-primary-foreground font-semibold text-sm">
+              {paused ? "Paused" : breathPhase}
+            </span>
           </div>
           <p className="text-xs text-muted-foreground mt-3">Box Breathing — follow the rhythm</p>
         </div>
+
+        {/* Pause / Resume */}
+        <button
+          onClick={togglePause}
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-border text-foreground font-semibold text-base hover:bg-muted transition mb-3"
+        >
+          {paused ? <Play className="h-5 w-5" /> : <Pause className="h-5 w-5" />}
+          {paused ? "Resume" : "Pause"}
+        </button>
 
         {/* Emergency Stop */}
         <button
