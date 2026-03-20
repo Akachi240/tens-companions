@@ -12,6 +12,14 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+function getReliefBadge(pct: number) {
+  if (pct >= 76) return { label: "⭐ Excellent", border: "border-green-500", bg: "bg-green-50", text: "text-green-700" };
+  if (pct >= 51) return { label: "✅ Good", border: "border-green-400", bg: "bg-green-50", text: "text-green-700" };
+  if (pct >= 26) return { label: "🟡 Moderate", border: "border-amber-400", bg: "bg-amber-50", text: "text-amber-700" };
+  if (pct >= 0) return { label: "🔴 Mild", border: "border-red-400", bg: "bg-red-50", text: "text-red-600" };
+  return { label: "⚠️ Increased", border: "border-red-600", bg: "bg-red-50", text: "text-red-700" };
+}
+
 export default function Dashboard() {
   const { activeProfile } = useProfile();
   const navigate = useNavigate();
@@ -162,23 +170,32 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                {[...sessions].reverse().map((s, i) => (
-                  <tr key={i} className="border-b border-border last:border-0">
-                    <td className="py-3 text-foreground">{new Date(s.date).toLocaleDateString()}</td>
-                    <td className="py-3 text-foreground">{s.placement}</td>
-                    <td className="py-3">
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                        s.painType === "Acute" ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"
-                      }`}>
-                        {s.painType}
-                      </span>
-                    </td>
-                    <td className="py-3 text-foreground">{s.initialPain}/10</td>
-                    <td className="py-3 text-foreground">{s.finalPain}/10</td>
-                    <td className="py-3 text-foreground">{s.painReductionPercentage ?? "—"}%</td>
-                    <td className="py-3 text-muted-foreground max-w-[200px] truncate">{s.patientNotes || "—"}</td>
-                  </tr>
-                ))}
+                {[...sessions].reverse().map((s, i) => {
+                  const pct = s.painReductionPercentage ?? 0;
+                  const tier = getReliefBadge(pct);
+                  const arrow = pct > 0 ? "↓" : pct < 0 ? "↑" : "→";
+                  return (
+                    <tr key={i} className="border-b border-border last:border-0">
+                      <td className="py-3 text-foreground">{new Date(s.date).toLocaleDateString()}</td>
+                      <td className="py-3 text-foreground">📍 {s.placement}</td>
+                      <td className="py-3">
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                          s.painType === "Acute" ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"
+                        }`}>
+                          {s.painType === "Acute" ? "🦴 Musculoskeletal" : "⚡ Neuropathic"}
+                        </span>
+                      </td>
+                      <td className="py-3 text-foreground">{s.initialPain}/10</td>
+                      <td className="py-3 text-foreground">{s.finalPain}/10</td>
+                      <td className="py-3">
+                        <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium border ${tier.border} ${tier.bg} ${tier.text}`}>
+                          {arrow}{pct}% · {tier.label}
+                        </span>
+                      </td>
+                      <td className="py-3 text-muted-foreground max-w-[200px] truncate">{s.patientNotes || "—"}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

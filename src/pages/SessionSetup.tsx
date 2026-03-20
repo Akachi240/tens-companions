@@ -23,6 +23,20 @@ interface SessionConfig {
   initialPain: number;
 }
 
+type SkinSensitivity = "normal" | "sensitive" | "very";
+
+const SENSITIVITY_OPTIONS: { value: SkinSensitivity; label: string; emoji: string; desc: string }[] = [
+  { value: "normal", label: "Normal", emoji: "🙂", desc: "Standard intensity" },
+  { value: "sensitive", label: "Sensitive", emoji: "⚠️", desc: "-1 intensity" },
+  { value: "very", label: "Very Sensitive", emoji: "🔴", desc: "-2 intensity" },
+];
+
+function getFreqZone(freq: number) {
+  if (freq <= 10) return { label: "⚡ Acupuncture-like range (1–10 Hz)", color: "text-blue-600" };
+  if (freq <= 19) return { label: "— Between zones", color: "text-muted-foreground" };
+  return { label: "✅ Conventional range (20–120 Hz)", color: "text-green-600" };
+}
+
 export default function SessionSetup() {
   const navigate = useNavigate();
   const { profiles, activeProfile, activeProfileId, setActiveProfileId, addProfile } = useProfile();
@@ -30,6 +44,8 @@ export default function SessionSetup() {
   const [safetyChecks, setSafetyChecks] = useState<boolean[]>(new Array(SAFETY_CHECKS.length).fill(false));
   const [newName, setNewName] = useState("");
   const [newCondition, setNewCondition] = useState("");
+  const [skinSensitivity, setSkinSensitivity] = useState<SkinSensitivity>("normal");
+  const [baseIntensity, setBaseIntensity] = useState(5);
   const [config, setConfig] = useState<SessionConfig>({
     placement: "",
     painType: "Acute",
@@ -74,8 +90,22 @@ export default function SessionSetup() {
     }
   };
 
+  const handleSkinSensitivity = (value: SkinSensitivity) => {
+    setSkinSensitivity(value);
+    if (value === "sensitive") {
+      setConfig((c) => ({ ...c, intensity: Math.max(1, baseIntensity - 1) }));
+    } else if (value === "very") {
+      setConfig((c) => ({ ...c, intensity: Math.max(1, baseIntensity - 2) }));
+    } else {
+      setConfig((c) => ({ ...c, intensity: baseIntensity }));
+    }
+  };
+
   const startSession = () => {
-    sessionStorage.setItem("tens-active-session", JSON.stringify(config));
+    sessionStorage.setItem(
+      "tens-active-session",
+      JSON.stringify({ ...config, skinSensitivity })
+    );
     navigate("/active-session");
   };
 
@@ -84,6 +114,7 @@ export default function SessionSetup() {
   };
 
   const totalSteps = 6;
+  const freqZone = getFreqZone(config.frequency);
 
   return (
     <div className="container max-w-2xl py-10">
@@ -106,7 +137,7 @@ export default function SessionSetup() {
           <div>
             <div className="flex items-center gap-3 mb-2">
               <ShieldCheck className="h-6 w-6 text-primary" />
-              <h2 className="font-display text-2xl font-bold text-foreground">Pre-Session Safety Check</h2>
+              <h2 className="font-display text-2xl font-bold text-foreground">🛡️ Pre-Session Safety Check</h2>
             </div>
             <p className="text-muted-foreground mt-1 mb-6">Please confirm ALL safety criteria before proceeding.</p>
 
@@ -195,10 +226,10 @@ export default function SessionSetup() {
           </div>
         )}
 
-        {/* Step 2: Pain Location (dropdown only, no body map) */}
+        {/* Step 2: Pain Location */}
         {step === 2 && (
           <div>
-            <h2 className="font-display text-2xl font-bold text-foreground">Pain Location</h2>
+            <h2 className="font-display text-2xl font-bold text-foreground">📍 Electrode Placement</h2>
             <p className="text-muted-foreground mt-1 mb-6">Select where you want to apply the TENS electrodes.</p>
 
             <select
@@ -244,24 +275,32 @@ export default function SessionSetup() {
             <p className="text-muted-foreground mt-1 mb-6">This determines the recommended TENS mode.</p>
 
             <div className="space-y-3">
-              {(["Acute", "Chronic"] as const).map((type) => (
-                <button
-                  key={type}
-                  onClick={() => updateConfig({ painType: type })}
-                  className={`w-full p-5 rounded-xl border text-left transition ${
-                    config.painType === type
-                      ? "border-primary bg-secondary"
-                      : "border-border hover:border-primary/40"
-                  }`}
-                >
-                  <div className="font-semibold text-foreground">{type}</div>
-                  <div className="text-sm text-muted-foreground mt-1">
-                    {type === "Acute"
-                      ? "Conventional TENS (20–120 Hz) — Gate Control Theory"
-                      : "Acupuncture-like TENS (1–10 Hz) — Endorphin Release"}
-                  </div>
-                </button>
-              ))}
+              <button
+                onClick={() => updateConfig({ painType: "Acute" })}
+                className={`w-full p-5 rounded-xl border text-left transition ${
+                  config.painType === "Acute"
+                    ? "border-primary bg-secondary"
+                    : "border-border hover:border-primary/40"
+                }`}
+              >
+                <div className="font-semibold text-foreground">🦴 Acute / Musculoskeletal Pain</div>
+                <div className="text-sm text-muted-foreground mt-1">
+                  Conventional TENS (20–120 Hz) — Gate Control Theory
+                </div>
+              </button>
+              <button
+                onClick={() => updateConfig({ painType: "Chronic" })}
+                className={`w-full p-5 rounded-xl border text-left transition ${
+                  config.painType === "Chronic"
+                    ? "border-primary bg-secondary"
+                    : "border-border hover:border-primary/40"
+                }`}
+              >
+                <div className="font-semibold text-foreground">⚡ Chronic / Neuropathic Pain</div>
+                <div className="text-sm text-muted-foreground mt-1">
+                  Acupuncture-like TENS (1–10 Hz) — Endorphin Release
+                </div>
+              </button>
             </div>
           </div>
         )}
@@ -279,13 +318,23 @@ export default function SessionSetup() {
             </div>
 
             <div className="space-y-5">
-              <ParamSlider
-                label="Frequency (Hz)"
-                value={config.frequency}
-                min={config.painType === "Acute" ? 20 : 1}
-                max={config.painType === "Acute" ? 120 : 10}
-                onChange={(v) => updateConfig({ frequency: v })}
-              />
+              <div>
+                <ParamSlider
+                  label="Frequency (Hz)"
+                  value={config.frequency}
+                  min={config.painType === "Acute" ? 20 : 1}
+                  max={config.painType === "Acute" ? 120 : 10}
+                  onChange={(v) => updateConfig({ frequency: v })}
+                />
+                {/* Frequency zone bar */}
+                <div className="w-full h-2 rounded-full flex overflow-hidden mt-1">
+                  <div className="bg-blue-400" style={{ width: "7.6%" }} title="Acupuncture-like (1–10 Hz)" />
+                  <div className="bg-gray-300" style={{ width: "7.6%" }} title="Between zones (11–19 Hz)" />
+                  <div className="bg-green-400" style={{ width: "84.8%" }} title="Conventional (20–120 Hz)" />
+                </div>
+                <p className={`text-xs mt-1 font-medium ${freqZone.color}`}>{freqZone.label}</p>
+              </div>
+
               <ParamSlider
                 label="Pulse Width (μs)"
                 value={config.pulseWidth}
@@ -299,16 +348,45 @@ export default function SessionSetup() {
                 value={config.intensity}
                 min={1}
                 max={80}
-                onChange={(v) => updateConfig({ intensity: v })}
+                onChange={(v) => {
+                  updateConfig({ intensity: v });
+                  setBaseIntensity(v);
+                  setSkinSensitivity("normal");
+                }}
               />
               <ParamSlider
-                label="Duration (min)"
+                label="⏱️ Duration (min)"
                 value={config.duration}
                 min={5}
                 max={60}
                 step={5}
                 onChange={(v) => updateConfig({ duration: v })}
               />
+
+              {/* Skin Sensitivity */}
+              <div>
+                <div className="mb-2">
+                  <label className="text-sm font-medium text-foreground">Skin Sensitivity</label>
+                  <p className="text-xs text-muted-foreground">Adjusts intensity automatically</p>
+                </div>
+                <div className="grid grid-cols-3 gap-3">
+                  {SENSITIVITY_OPTIONS.map((opt) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => handleSkinSensitivity(opt.value)}
+                      className={`p-3 rounded-xl border text-center transition ${
+                        skinSensitivity === opt.value
+                          ? "border-primary bg-secondary"
+                          : "border-border hover:border-primary/40"
+                      }`}
+                    >
+                      <div className="text-xl mb-1">{opt.emoji}</div>
+                      <div className="text-sm font-semibold text-foreground">{opt.label}</div>
+                      <div className="text-xs text-muted-foreground">{opt.desc}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -316,7 +394,7 @@ export default function SessionSetup() {
         {/* Step 5: Pain Rating */}
         {step === 5 && (
           <div>
-            <h2 className="font-display text-2xl font-bold text-foreground">Pre-Session Pain Level</h2>
+            <h2 className="font-display text-2xl font-bold text-foreground">❤️ How is your pain right now?</h2>
             <p className="text-muted-foreground mt-1 mb-6">Rate your current pain before starting therapy.</p>
 
             <div className="text-center">

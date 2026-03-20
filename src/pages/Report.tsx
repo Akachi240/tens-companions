@@ -46,7 +46,7 @@ export default function Report() {
 
       {/* Printable Content */}
       <div className="bg-card rounded-xl border border-border p-8 print:border-0 print:shadow-none print:p-0">
-        <h1 className="font-display text-2xl font-bold text-foreground mb-1">TENS Companion — Doctor's Report</h1>
+        <h1 className="font-display text-2xl font-bold text-foreground mb-1">TensPilot+ — Doctor's Report</h1>
         <p className="text-sm text-muted-foreground mb-6">Generated: {new Date().toLocaleDateString()}</p>
 
         <hr className="border-border mb-6" />

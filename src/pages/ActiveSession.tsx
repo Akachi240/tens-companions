@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { StopCircle, Clock, Pause, Play } from "lucide-react";
 import { useProfile } from "@/context/ProfileContext";
 
-function getReliefBadge(percentage: number) {
-  if (percentage <= 25) return { label: "Mild Relief", className: "bg-destructive/10 text-destructive" };
-  if (percentage <= 50) return { label: "Moderate Relief", className: "bg-medical-warning/10 text-medical-warning" };
-  return { label: "Excellent Relief", className: "bg-medical-emerald/10 text-medical-emerald" };
+function getReliefTier(pct: number) {
+  if (pct >= 76) return { label: "⭐ Excellent Relief", border: "border-green-500", bg: "bg-green-50", text: "text-green-700" };
+  if (pct >= 51) return { label: "✅ Good Relief", border: "border-green-400", bg: "bg-green-50", text: "text-green-700" };
+  if (pct >= 26) return { label: "🟡 Moderate Relief", border: "border-amber-400", bg: "bg-amber-50", text: "text-amber-700" };
+  if (pct >= 0) return { label: "🔴 Mild Relief", border: "border-red-400", bg: "bg-red-50", text: "text-red-600" };
+  return { label: "⚠️ Pain Increased", border: "border-red-600", bg: "bg-red-50", text: "text-red-700" };
 }
 
 export default function ActiveSession() {
@@ -21,7 +23,7 @@ export default function ActiveSession() {
   const [running, setRunning] = useState(true);
   const [paused, setPaused] = useState(false);
   const [showPost, setShowPost] = useState(false);
-  const [finalPain, setFinalPain] = useState(5);
+  const [postPainLevel, setPostPainLevel] = useState<number | null>(null);
   const [notes, setNotes] = useState("");
   const intervalRef = useRef<ReturnType<typeof setInterval>>();
 
@@ -55,11 +57,12 @@ export default function ActiveSession() {
 
   const mins = Math.floor(remaining / 60);
   const secs = remaining % 60;
+  const elapsed = Math.round((totalSeconds - remaining) / 60);
 
-  // Breathing cycle
+  // Breathing cycle — only when paused
   const [breathPhase, setBreathPhase] = useState("Inhale");
   useEffect(() => {
-    if (!running || paused) return;
+    if (!running || !paused) return;
     const phases = ["Inhale", "Hold", "Exhale", "Hold"];
     let i = 0;
     const t = setInterval(() => {
@@ -69,15 +72,17 @@ export default function ActiveSession() {
     return () => clearInterval(t);
   }, [running, paused]);
 
-  const painReductionPercentage =
-    config?.initialPain > 0
-      ? Math.round(((config.initialPain - finalPain) / config.initialPain) * 100)
+  const reductionPct =
+    config?.initialPain > 0 && postPainLevel !== null
+      ? ((config.initialPain - postPainLevel) / config.initialPain) * 100
       : 0;
 
-  const relief = getReliefBadge(Math.max(0, painReductionPercentage));
+  const relief = getReliefTier(reductionPct);
+
+  const arrow = reductionPct > 0 ? "↓" : reductionPct < 0 ? "↑" : "→";
 
   const saveSession = () => {
-    if (!config || !activeProfile) {
+    if (!config || !activeProfile || postPainLevel === null) {
       navigate("/dashboard");
       return;
     }
@@ -92,9 +97,9 @@ export default function ActiveSession() {
         duration: config.duration,
       },
       initialPain: config.initialPain,
-      finalPain,
+      finalPain: postPainLevel,
       duration: config.duration,
-      painReductionPercentage: Math.max(0, painReductionPercentage),
+      painReductionPercentage: Math.max(0, Math.round(reductionPct)),
       patientNotes: notes,
     });
     sessionStorage.removeItem("tens-active-session");
@@ -115,64 +120,83 @@ export default function ActiveSession() {
     );
   }
 
+  /* ── Post-Session Screen ── */
   if (showPost) {
     return (
       <div className="container max-w-lg py-16">
         <div className="medical-card-elevated text-center">
-          <h2 className="font-display text-2xl font-bold text-foreground mb-2">Session Complete</h2>
-          <p className="text-muted-foreground mb-8">Rate your pain after therapy and add any notes.</p>
-
-          <div className="text-6xl font-display font-extrabold text-primary mb-4">{finalPain}</div>
-          <input
-            type="range"
-            min={0}
-            max={10}
-            value={finalPain}
-            onChange={(e) => setFinalPain(Number(e.target.value))}
-            className="w-full accent-primary mb-1"
-          />
-          <div className="flex justify-between text-xs text-muted-foreground mb-6">
-            <span>0 — No Pain</span>
-            <span>10 — Worst Pain</span>
+          {/* Header */}
+          <div className="flex justify-center mb-4">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-green-100 border-2 border-green-500">
+              <span className="text-green-600 text-2xl">✓</span>
+            </div>
           </div>
+          <h2 className="font-display text-xl font-bold text-foreground mb-1">Session Complete!</h2>
+          <p className="text-muted-foreground text-sm mb-1">{elapsed} minutes of therapy completed</p>
+          <p className="text-sm text-muted-foreground mb-8">
+            {config.frequency} Hz · {config.pulseWidth} µs
+          </p>
 
-          {/* Relief Badge */}
+          {/* Pain Picker */}
           <div className="mb-6">
-            <p className="text-sm text-muted-foreground mb-2">Pain Reduction</p>
-            <div className="flex items-center justify-center gap-3">
-              <span className="text-2xl font-display font-bold text-foreground">
-                {painReductionPercentage > 0 ? painReductionPercentage : 0}%
-              </span>
-              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${relief.className}`}>
-                {painReductionPercentage > 0 ? relief.label : "No Relief"}
-              </span>
+            <p className="text-sm font-medium text-foreground mb-3">How do you feel now? 🩺</p>
+            <div className="flex flex-wrap justify-center gap-2">
+              {Array.from({ length: 11 }, (_, i) => i).map((n) => (
+                <button
+                  key={n}
+                  onClick={() => setPostPainLevel(n)}
+                  className={`w-10 h-10 rounded-full border-2 font-semibold text-sm transition ${
+                    postPainLevel === n
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card text-foreground hover:border-primary"
+                  }`}
+                >
+                  {n}
+                </button>
+              ))}
             </div>
           </div>
 
+          {/* Live Reduction Badge */}
+          {postPainLevel !== null && (
+            <div className={`rounded-xl border-2 p-4 text-center transition-all mb-6 ${relief.border} ${relief.bg}`}>
+              <div className={`text-3xl font-bold tabular-nums ${relief.text}`}>
+                {arrow}{Math.abs(reductionPct).toFixed(1)}%
+              </div>
+              <div className={`text-sm font-semibold mt-1 ${relief.text}`}>{relief.label}</div>
+              <div className="text-xs text-muted-foreground mt-1">(pre − post) ÷ pre × 100</div>
+            </div>
+          )}
+
+          {/* Notes */}
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            placeholder="Session Notes / Complaints..."
-            className="w-full p-3 rounded-xl border border-border bg-background text-foreground text-sm resize-none h-28 focus:outline-none focus:ring-2 focus:ring-ring mb-6"
+            placeholder="Any side effects or notes..."
+            rows={3}
+            className="w-full rounded-xl border border-border p-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring mb-6"
           />
 
+          {/* Save */}
           <button
             onClick={saveSession}
-            className="w-full py-3 rounded-xl gradient-medical-bg text-primary-foreground font-semibold hover:opacity-90 transition"
+            disabled={postPainLevel === null}
+            className="w-full py-3 rounded-xl gradient-medical-bg text-primary-foreground font-semibold hover:opacity-90 transition disabled:opacity-40"
           >
-            Save & View Dashboard
+            Save & Return to Dashboard
           </button>
         </div>
       </div>
     );
   }
 
+  /* ── Active Session Screen ── */
   return (
-    <div className="container max-w-lg py-16">
+    <div className="container max-w-lg py-16 pb-20">
       <div className="medical-card-elevated text-center">
         <div className="flex items-center justify-center gap-2 text-muted-foreground mb-2">
           <Clock className="h-4 w-4" />
-          <span className="text-sm font-medium">{config.placement} • {config.painType}</span>
+          <span className="text-sm font-medium">🔋 Session Running — {config.placement} • {config.painType}</span>
         </div>
         <div className="text-7xl md:text-8xl font-display font-extrabold text-foreground tabular-nums tracking-tight">
           {String(mins).padStart(2, "0")}:{String(secs).padStart(2, "0")}
@@ -181,34 +205,49 @@ export default function ActiveSession() {
           {config.frequency} Hz · {config.pulseWidth} μs · {config.intensity} mA
         </p>
 
-        <div className="mt-10 mb-8 flex flex-col items-center">
-          <div
-            className={`w-28 h-28 rounded-full gradient-medical-bg flex items-center justify-center ${
-              paused ? "" : "breathing-circle"
-            }`}
-          >
-            <span className="text-primary-foreground font-semibold text-sm">
-              {paused ? "Paused" : breathPhase}
-            </span>
+        {/* Breathing circle — only when paused */}
+        {paused && (
+          <div className="mt-10 mb-8 flex flex-col items-center">
+            <p className="text-sm text-muted-foreground mb-2">{breathPhase}</p>
+            <div className="w-24 h-24 rounded-full gradient-medical-bg flex items-center justify-center breathing-circle">
+              <span className="text-primary-foreground font-semibold text-sm">
+                {breathPhase}
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground mt-3">Box Breathing — follow the rhythm</p>
           </div>
-          <p className="text-xs text-muted-foreground mt-3">Box Breathing — follow the rhythm</p>
+        )}
+
+        <div className="mt-10">
+          <button
+            onClick={togglePause}
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-border text-foreground font-semibold text-base hover:bg-muted transition mb-3"
+          >
+            {paused ? <Play className="h-5 w-5" /> : <Pause className="h-5 w-5" />}
+            {paused ? "▶️ Resume Session" : "⏸ Pause Session"}
+          </button>
+
+          <button
+            onClick={stopSession}
+            className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-destructive text-destructive-foreground font-bold text-lg hover:opacity-90 transition"
+          >
+            <StopCircle className="h-6 w-6" />
+            🛑 Emergency Stop
+          </button>
         </div>
+      </div>
 
-        <button
-          onClick={togglePause}
-          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-border text-foreground font-semibold text-base hover:bg-muted transition mb-3"
-        >
-          {paused ? <Play className="h-5 w-5" /> : <Pause className="h-5 w-5" />}
-          {paused ? "Resume" : "Pause"}
-        </button>
-
-        <button
-          onClick={stopSession}
-          className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-destructive text-destructive-foreground font-bold text-lg hover:opacity-90 transition"
-        >
-          <StopCircle className="h-6 w-6" />
-          Emergency Stop
-        </button>
+      {/* Bottom status bar */}
+      <div
+        className={`fixed bottom-0 left-0 right-0 z-40 py-3 px-4 text-center text-sm font-medium ${
+          paused
+            ? "bg-amber-500 text-white"
+            : "bg-green-600 text-white"
+        }`}
+      >
+        {paused
+          ? "⏸ Session Paused"
+          : `● Session Active — ${elapsed}:${String(secs).padStart(2, "0")} therapy completed`}
       </div>
     </div>
   );
