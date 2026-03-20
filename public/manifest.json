@@ -1,7 +1,7 @@
 {
-  "name": "PainRelief+",
-  "short_name": "PainRelief+",
-  "description": "Your Personalized TENS Companion",
+  "name": "TensPilot+",
+  "short_name": "TensPilot+",
+  "description": "Your TENS Therapy Companion",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
