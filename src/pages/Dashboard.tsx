@@ -206,15 +206,19 @@ export default function Dashboard() {
   );
 }
 
-function StatCard({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) {
+function StatCard({ icon: Icon, label, value, accentColor = "bg-primary" }: { icon: React.ElementType; label: string; value: string; accentColor?: string }) {
   return (
-    <div className="medical-card flex items-center gap-4">
+    <div className="medical-card flex items-center gap-4 relative overflow-hidden animate-in">
+      <div className={`absolute left-0 top-0 bottom-0 w-[3px] ${accentColor}`} />
       <div className="p-3 rounded-xl bg-primary/10 text-primary">
         <Icon className="h-5 w-5" />
       </div>
       <div>
         <p className="text-sm text-muted-foreground">{label}</p>
         <p className="text-xl font-display font-bold text-foreground">{value}</p>
+      </div>
+      <div className={`absolute top-3 right-3 w-10 h-10 rounded-full ${accentColor} opacity-10`}>
+        <Icon className="h-5 w-5 absolute inset-0 m-auto" />
       </div>
     </div>
   );

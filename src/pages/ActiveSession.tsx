@@ -159,7 +159,7 @@ export default function ActiveSession() {
 
           {/* Live Reduction Badge */}
           {postPainLevel !== null && (
-            <div className={`rounded-xl border-2 p-4 text-center transition-all mb-6 ${relief.border} ${relief.bg}`}>
+            <div className={`rounded-xl border-2 p-4 text-center transition-all mb-6 animate-in ${relief.border} ${relief.bg}`}>
               <div className={`text-3xl font-bold tabular-nums ${relief.text}`}>
                 {arrow}{Math.abs(reductionPct).toFixed(1)}%
               </div>
