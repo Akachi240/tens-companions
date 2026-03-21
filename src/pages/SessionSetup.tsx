@@ -131,7 +131,7 @@ export default function SessionSetup() {
         ))}
       </div>
 
-      <div className="medical-card-elevated animate-in">
+      <div className="medical-card-elevated">
         {/* Step 0: Safety Gate */}
         {step === 0 && (
           <div>

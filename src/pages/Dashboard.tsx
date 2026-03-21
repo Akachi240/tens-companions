@@ -90,8 +90,8 @@ export default function Dashboard() {
 
       {/* Stats */}
       <div className="grid sm:grid-cols-3 gap-4 mb-6">
-        <StatCard icon={BarChart3} label="Total Sessions" value={String(totalSessions)} accentColor="bg-primary" />
-        <StatCard icon={TrendingDown} label="Avg Pain Reduction" value={avgReduction + " pts"} accentColor="bg-green-500" />
+        <StatCard icon={BarChart3} label="Total Sessions" value={String(totalSessions)} />
+        <StatCard icon={TrendingDown} label="Avg Pain Reduction" value={avgReduction + " pts"} />
         <StatCard
           icon={CalendarDays}
           label="Last Session"
@@ -100,13 +100,12 @@ export default function Dashboard() {
               ? new Date(sessions[sessions.length - 1].date).toLocaleDateString()
               : "—"
           }
-          accentColor="bg-amber-500"
         />
       </div>
 
       {/* Therapy Insights */}
       {sessions.length > 0 && (
-        <div className="medical-card-elevated mb-8 animate-in">
+        <div className="medical-card-elevated mb-8">
           <h2 className="font-display text-lg font-bold text-foreground mb-4">Therapy Insights</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="flex items-center gap-3 p-4 rounded-xl bg-secondary border border-border">
@@ -206,19 +205,15 @@ export default function Dashboard() {
   );
 }
 
-function StatCard({ icon: Icon, label, value, accentColor = "bg-primary" }: { icon: React.ElementType; label: string; value: string; accentColor?: string }) {
+function StatCard({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) {
   return (
-    <div className="medical-card flex items-center gap-4 relative overflow-hidden animate-in">
-      <div className={`absolute left-0 top-0 bottom-0 w-[3px] ${accentColor}`} />
+    <div className="medical-card flex items-center gap-4">
       <div className="p-3 rounded-xl bg-primary/10 text-primary">
         <Icon className="h-5 w-5" />
       </div>
       <div>
         <p className="text-sm text-muted-foreground">{label}</p>
         <p className="text-xl font-display font-bold text-foreground">{value}</p>
-      </div>
-      <div className={`absolute top-3 right-3 w-10 h-10 rounded-full ${accentColor} opacity-10`}>
-        <Icon className="h-5 w-5 absolute inset-0 m-auto" />
       </div>
     </div>
   );

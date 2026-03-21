@@ -142,13 +142,13 @@ export default function ActiveSession() {
             <p className="text-sm font-medium text-foreground mb-3">How do you feel now? 🩺</p>
             <div className="flex flex-wrap justify-center gap-2">
               {Array.from({ length: 11 }, (_, i) => i).map((n) => (
-                 <button
+                <button
                   key={n}
                   onClick={() => setPostPainLevel(n)}
-                  className={`w-10 h-10 rounded-full border-2 text-sm pain-btn ${
+                  className={`w-10 h-10 rounded-full border-2 font-semibold text-sm transition ${
                     postPainLevel === n
-                      ? "pain-btn-selected"
-                      : "border-border bg-card text-foreground"
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card text-foreground hover:border-primary"
                   }`}
                 >
                   {n}
@@ -159,7 +159,7 @@ export default function ActiveSession() {
 
           {/* Live Reduction Badge */}
           {postPainLevel !== null && (
-            <div className={`rounded-xl border-2 p-4 text-center transition-all mb-6 animate-in ${relief.border} ${relief.bg}`}>
+            <div className={`rounded-xl border-2 p-4 text-center transition-all mb-6 ${relief.border} ${relief.bg}`}>
               <div className={`text-3xl font-bold tabular-nums ${relief.text}`}>
                 {arrow}{Math.abs(reductionPct).toFixed(1)}%
               </div>
