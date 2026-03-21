@@ -90,8 +90,8 @@ export default function Dashboard() {
 
       {/* Stats */}
       <div className="grid sm:grid-cols-3 gap-4 mb-6">
-        <StatCard icon={BarChart3} label="Total Sessions" value={String(totalSessions)} />
-        <StatCard icon={TrendingDown} label="Avg Pain Reduction" value={avgReduction + " pts"} />
+        <StatCard icon={BarChart3} label="Total Sessions" value={String(totalSessions)} accentColor="bg-primary" />
+        <StatCard icon={TrendingDown} label="Avg Pain Reduction" value={avgReduction + " pts"} accentColor="bg-green-500" />
         <StatCard
           icon={CalendarDays}
           label="Last Session"
@@ -100,6 +100,7 @@ export default function Dashboard() {
               ? new Date(sessions[sessions.length - 1].date).toLocaleDateString()
               : "—"
           }
+          accentColor="bg-amber-500"
         />
       </div>
 
