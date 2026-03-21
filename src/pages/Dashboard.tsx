@@ -106,7 +106,7 @@ export default function Dashboard() {
 
       {/* Therapy Insights */}
       {sessions.length > 0 && (
-        <div className="medical-card-elevated mb-8">
+        <div className="medical-card-elevated mb-8 animate-in">
           <h2 className="font-display text-lg font-bold text-foreground mb-4">Therapy Insights</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="flex items-center gap-3 p-4 rounded-xl bg-secondary border border-border">
