@@ -54,14 +54,14 @@ export default function Index() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[hsl(199_89%_97%)] to-[hsl(199_89%_94%)]">
+      <section className="relative overflow-hidden hero-bg">
         <div className="absolute inset-0 gradient-medical-bg opacity-[0.04]" />
         <div className="container py-20 md:py-28 text-center relative">
-          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium mb-6">
+          <div className="hero-badge">
             <Zap className="h-4 w-4" />
             Clinical-Grade TENS Companion
           </div>
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight max-w-3xl mx-auto">
+          <h1 className="app-name text-4xl md:text-5xl lg:text-6xl text-foreground leading-tight max-w-3xl mx-auto">
             Your Intelligent{" "}
             <span className="text-primary">TENS Therapy</span>{" "}
             Companion
@@ -72,7 +72,7 @@ export default function Index() {
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link
               to="/session-setup"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl gradient-medical-bg text-primary-foreground font-semibold shadow-md hover:opacity-90 transition"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl gradient-medical-bg text-primary-foreground font-semibold shadow-md hover:opacity-90 transition btn-primary"
             >
               Start a Session <ArrowRight className="h-4 w-4" />
             </Link>
@@ -96,7 +96,7 @@ export default function Index() {
             <Link
               key={f.to}
               to={f.to}
-              className="medical-card-elevated group hover:shadow-lg transition-shadow"
+              className="medical-card-elevated group hover:shadow-lg transition-shadow animate-in"
             >
               <div className={`inline-flex p-3 rounded-xl ${f.iconBg} ${f.iconColor} mb-4`}>
                 <f.icon className="h-6 w-6" />
