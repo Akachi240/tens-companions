@@ -19,12 +19,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen flex flex-col bg-background">
       {/* Header */}
       <header className="no-print sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-md">
-        <div className="container flex h-16 items-center justify-between">
+        <div className="container flex h-14 sm:h-16 items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg gradient-medical-bg">
-              <Zap className="h-5 w-5 text-primary-foreground" />
+            <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg gradient-medical-bg">
+              <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" />
             </div>
-            <span className="font-display text-lg font-bold text-foreground">TensPilot+</span>
+            <span className="font-display text-base sm:text-lg font-bold text-foreground">TensPilot+</span>
           </Link>
 
           {/* Desktop Nav */}
@@ -59,7 +59,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile Nav */}
         {mobileOpen && (
-          <nav className="md:hidden border-t border-border bg-card p-3 space-y-1">
+          <nav className="md:hidden border-t border-border bg-card p-3 space-y-1 max-h-[80vh] overflow-y-auto">
             {navItems.map((item) => {
               const active = location.pathname === item.to;
               return (
