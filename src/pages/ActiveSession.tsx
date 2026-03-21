@@ -123,29 +123,29 @@ export default function ActiveSession() {
   /* ── Post-Session Screen ── */
   if (showPost) {
     return (
-      <div className="container max-w-lg py-16">
+      <div className="container max-w-lg py-10 sm:py-16 px-4">
         <div className="medical-card-elevated text-center">
           {/* Header */}
           <div className="flex justify-center mb-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-green-100 border-2 border-green-500">
-              <span className="text-green-600 text-2xl">✓</span>
+            <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-green-100 border-2 border-green-500">
+              <span className="text-green-600 text-xl sm:text-2xl">✓</span>
             </div>
           </div>
-          <h2 className="font-display text-xl font-bold text-foreground mb-1">Session Complete!</h2>
+          <h2 className="font-display text-lg sm:text-xl font-bold text-foreground mb-1">Session Complete!</h2>
           <p className="text-muted-foreground text-sm mb-1">{elapsed} minutes of therapy completed</p>
-          <p className="text-sm text-muted-foreground mb-8">
+          <p className="text-sm text-muted-foreground mb-6 sm:mb-8">
             {config.frequency} Hz · {config.pulseWidth} µs
           </p>
 
           {/* Pain Picker */}
-          <div className="mb-6">
+          <div className="mb-5 sm:mb-6">
             <p className="text-sm font-medium text-foreground mb-3">How do you feel now? 🩺</p>
-            <div className="flex flex-wrap justify-center gap-2">
+            <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
               {Array.from({ length: 11 }, (_, i) => i).map((n) => (
                 <button
                   key={n}
                   onClick={() => setPostPainLevel(n)}
-                  className={`w-10 h-10 rounded-full border-2 font-semibold text-sm transition ${
+                  className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 font-semibold text-xs sm:text-sm transition ${
                     postPainLevel === n
                       ? "border-primary bg-primary text-primary-foreground"
                       : "border-border bg-card text-foreground hover:border-primary"
@@ -159,8 +159,8 @@ export default function ActiveSession() {
 
           {/* Live Reduction Badge */}
           {postPainLevel !== null && (
-            <div className={`rounded-xl border-2 p-4 text-center transition-all mb-6 ${relief.border} ${relief.bg}`}>
-              <div className={`text-3xl font-bold tabular-nums ${relief.text}`}>
+            <div className={`rounded-xl border-2 p-3 sm:p-4 text-center transition-all mb-5 sm:mb-6 ${relief.border} ${relief.bg}`}>
+              <div className={`text-2xl sm:text-3xl font-bold tabular-nums reduction-pct ${relief.text}`}>
                 {arrow}{Math.abs(reductionPct).toFixed(1)}%
               </div>
               <div className={`text-sm font-semibold mt-1 ${relief.text}`}>{relief.label}</div>
@@ -173,8 +173,8 @@ export default function ActiveSession() {
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Any side effects or notes..."
-            rows={3}
-            className="w-full rounded-xl border border-border p-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring mb-6"
+            rows={2}
+            className="w-full rounded-xl border border-border p-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring mb-5 sm:mb-6"
           />
 
           {/* Save */}
@@ -192,25 +192,32 @@ export default function ActiveSession() {
 
   /* ── Active Session Screen ── */
   return (
-    <div className="container max-w-lg py-16 pb-20">
+    <div className="container max-w-lg py-10 sm:py-16 pb-20 px-4">
       <div className="medical-card-elevated text-center">
         <div className="flex items-center justify-center gap-2 text-muted-foreground mb-2">
           <Clock className="h-4 w-4" />
           <span className="text-sm font-medium">🔋 Session Running — {config.placement} • {config.painType}</span>
         </div>
-        <div className="text-7xl md:text-8xl font-display font-extrabold text-foreground tabular-nums tracking-tight">
+        <div className="text-6xl sm:text-7xl md:text-8xl font-display font-extrabold text-foreground tabular-nums tracking-tight timer-display">
           {String(mins).padStart(2, "0")}:{String(secs).padStart(2, "0")}
         </div>
-        <p className="text-sm text-muted-foreground mt-2">
+
+        {/* Params — inline on mobile, hidden on sm+ */}
+        <div className="flex sm:hidden flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground mt-2">
+          <span>Freq: {config.frequency} Hz</span>
+          <span>PW: {config.pulseWidth} μs</span>
+          <span>Int: {config.intensity} mA</span>
+        </div>
+        <p className="hidden sm:block text-sm text-muted-foreground mt-2">
           {config.frequency} Hz · {config.pulseWidth} μs · {config.intensity} mA
         </p>
 
         {/* Breathing circle — only when paused */}
         {paused && (
-          <div className="mt-10 mb-8 flex flex-col items-center">
-            <p className="text-sm text-muted-foreground mb-2">{breathPhase}</p>
-            <div className="w-24 h-24 rounded-full gradient-medical-bg flex items-center justify-center breathing-circle">
-              <span className="text-primary-foreground font-semibold text-sm">
+          <div className="mt-8 sm:mt-10 mb-6 sm:mb-8 flex flex-col items-center">
+            <p className="text-xs sm:text-sm text-muted-foreground mb-2">{breathPhase}</p>
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full gradient-medical-bg flex items-center justify-center breathing-circle">
+              <span className="text-primary-foreground font-semibold text-xs sm:text-sm">
                 {breathPhase}
               </span>
             </div>
@@ -218,10 +225,10 @@ export default function ActiveSession() {
           </div>
         )}
 
-        <div className="mt-10">
+        <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-2 sm:gap-3 w-full">
           <button
             onClick={togglePause}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-border text-foreground font-semibold text-base hover:bg-muted transition mb-3"
+            className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-border text-foreground font-semibold text-base hover:bg-muted transition"
           >
             {paused ? <Play className="h-5 w-5" /> : <Pause className="h-5 w-5" />}
             {paused ? "▶️ Resume Session" : "⏸ Pause Session"}
@@ -229,9 +236,9 @@ export default function ActiveSession() {
 
           <button
             onClick={stopSession}
-            className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-destructive text-destructive-foreground font-bold text-lg hover:opacity-90 transition"
+            className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 py-3 sm:py-4 rounded-xl bg-destructive text-destructive-foreground font-bold text-base sm:text-lg hover:opacity-90 transition"
           >
-            <StopCircle className="h-6 w-6" />
+            <StopCircle className="h-5 w-5 sm:h-6 sm:w-6" />
             🛑 Emergency Stop
           </button>
         </div>

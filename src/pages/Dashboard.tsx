@@ -1,6 +1,6 @@
 import { useProfile } from "@/context/ProfileContext";
 import { useNavigate } from "react-router-dom";
-import { BarChart3, TrendingDown, FileText, CalendarDays, MapPin, Zap } from "lucide-react";
+import { BarChart3, TrendingDown, FileText, CalendarDays, MapPin, Zap, Clock } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -74,24 +74,24 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="container max-w-4xl py-10">
-      <div className="flex items-center justify-between mb-8">
+    <div className="container max-w-4xl py-6 sm:py-10 px-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 sm:mb-8">
         <div>
-          <h1 className="font-display text-3xl font-bold text-foreground">Dashboard</h1>
-          <p className="text-muted-foreground">{activeProfile.name}'s therapy overview</p>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-muted-foreground text-sm">{activeProfile.name}'s therapy overview</p>
         </div>
         <button
           onClick={() => navigate("/report")}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl gradient-medical-bg text-primary-foreground font-semibold hover:opacity-90 transition"
+          className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl gradient-medical-bg text-primary-foreground font-semibold hover:opacity-90 transition text-sm"
         >
-          <FileText className="h-4 w-4" /> Export Doctor's Report
+          <FileText className="h-4 w-4" /> Export Report
         </button>
       </div>
 
       {/* Stats */}
-      <div className="grid sm:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
         <StatCard icon={BarChart3} label="Total Sessions" value={String(totalSessions)} />
-        <StatCard icon={TrendingDown} label="Avg Pain Reduction" value={avgReduction + " pts"} />
+        <StatCard icon={TrendingDown} label="Avg Reduction" value={avgReduction + " pts"} />
         <StatCard
           icon={CalendarDays}
           label="Last Session"
@@ -105,25 +105,25 @@ export default function Dashboard() {
 
       {/* Therapy Insights */}
       {sessions.length > 0 && (
-        <div className="medical-card-elevated mb-8">
-          <h2 className="font-display text-lg font-bold text-foreground mb-4">Therapy Insights</h2>
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div className="flex items-center gap-3 p-4 rounded-xl bg-secondary border border-border">
-              <div className="p-2.5 rounded-lg bg-primary/10 text-primary">
-                <MapPin className="h-5 w-5" />
+        <div className="medical-card-elevated mb-6 sm:mb-8">
+          <h2 className="font-display text-base sm:text-lg font-bold text-foreground mb-3 sm:mb-4">Therapy Insights</h2>
+          <div className="grid grid-cols-2 gap-2 sm:gap-4">
+            <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-secondary border border-border">
+              <div className="p-2 sm:p-2.5 rounded-lg bg-primary/10 text-primary">
+                <MapPin className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Most Treated Location</p>
-                <p className="text-base font-display font-bold text-foreground">{mostTreatedLocation}</p>
+                <p className="text-xs text-muted-foreground">Most Treated</p>
+                <p className="text-sm sm:text-base font-display font-bold text-foreground">{mostTreatedLocation}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 p-4 rounded-xl bg-secondary border border-border">
-              <div className="p-2.5 rounded-lg bg-accent/10 text-accent">
-                <Zap className="h-5 w-5" />
+            <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-secondary border border-border">
+              <div className="p-2 sm:p-2.5 rounded-lg bg-accent/10 text-accent">
+                <Zap className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Most Effective Mode</p>
-                <p className="text-base font-display font-bold text-foreground">{mostEffectiveMode}</p>
+                <p className="text-xs text-muted-foreground">Best Mode</p>
+                <p className="text-sm sm:text-base font-display font-bold text-foreground">{mostEffectiveMode}</p>
               </div>
             </div>
           </div>
@@ -132,18 +132,18 @@ export default function Dashboard() {
 
       {/* Pain Trend Chart */}
       {chartData.length > 0 && (
-        <div className="medical-card-elevated mb-8">
-          <h2 className="font-display text-lg font-bold text-foreground mb-4">Pain Trend</h2>
-          <div className="h-64">
+        <div className="medical-card-elevated mb-6 sm:mb-8">
+          <h2 className="font-display text-base sm:text-lg font-bold text-foreground mb-3 sm:mb-4">Pain Trend</h2>
+          <div className="h-48 sm:h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(210 18% 90%)" />
-                <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="hsl(210 10% 50%)" />
-                <YAxis domain={[0, 10]} tick={{ fontSize: 12 }} stroke="hsl(210 10% 50%)" />
+                <XAxis dataKey="name" tick={{ fontSize: 11 }} stroke="hsl(210 10% 50%)" />
+                <YAxis domain={[0, 10]} tick={{ fontSize: 11 }} stroke="hsl(210 10% 50%)" />
                 <Tooltip />
                 <Legend />
-                <Line type="monotone" dataKey="Initial Pain" stroke="hsl(0 72% 51%)" strokeWidth={2} dot={{ r: 4 }} />
-                <Line type="monotone" dataKey="Final Pain" stroke="hsl(173 58% 39%)" strokeWidth={2} dot={{ r: 4 }} />
+                <Line type="monotone" dataKey="Initial Pain" stroke="hsl(0 72% 51%)" strokeWidth={2} dot={{ r: 3 }} />
+                <Line type="monotone" dataKey="Final Pain" stroke="hsl(173 58% 39%)" strokeWidth={2} dot={{ r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -152,53 +152,89 @@ export default function Dashboard() {
 
       {/* Session History */}
       <div className="medical-card-elevated">
-        <h2 className="font-display text-lg font-bold text-foreground mb-4">Session History</h2>
+        <h2 className="font-display text-base sm:text-lg font-bold text-foreground mb-3 sm:mb-4">Session History</h2>
         {sessions.length === 0 ? (
           <p className="text-muted-foreground text-sm">No sessions recorded yet.</p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border text-left">
-                  <th className="pb-3 font-medium text-muted-foreground">Date</th>
-                  <th className="pb-3 font-medium text-muted-foreground">Location</th>
-                  <th className="pb-3 font-medium text-muted-foreground">Type</th>
-                  <th className="pb-3 font-medium text-muted-foreground">Pain Before</th>
-                  <th className="pb-3 font-medium text-muted-foreground">Pain After</th>
-                  <th className="pb-3 font-medium text-muted-foreground">Relief</th>
-                  <th className="pb-3 font-medium text-muted-foreground">Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[...sessions].reverse().map((s, i) => {
-                  const pct = s.painReductionPercentage ?? 0;
-                  const tier = getReliefBadge(pct);
-                  const arrow = pct > 0 ? "↓" : pct < 0 ? "↑" : "→";
-                  return (
-                    <tr key={i} className="border-b border-border last:border-0">
-                      <td className="py-3 text-foreground">{new Date(s.date).toLocaleDateString()}</td>
-                      <td className="py-3 text-foreground">📍 {s.placement}</td>
-                      <td className="py-3">
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                          s.painType === "Acute" ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"
-                        }`}>
-                          {s.painType === "Acute" ? "🦴 Musculoskeletal" : "⚡ Neuropathic"}
-                        </span>
-                      </td>
-                      <td className="py-3 text-foreground">{s.initialPain}/10</td>
-                      <td className="py-3 text-foreground">{s.finalPain}/10</td>
-                      <td className="py-3">
-                        <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium border ${tier.border} ${tier.bg} ${tier.text}`}>
-                          {arrow}{pct}% · {tier.label}
-                        </span>
-                      </td>
-                      <td className="py-3 text-muted-foreground max-w-[200px] truncate">{s.patientNotes || "—"}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+          <>
+            {/* Desktop table */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border text-left">
+                    <th className="pb-3 font-medium text-muted-foreground">Date</th>
+                    <th className="pb-3 font-medium text-muted-foreground">Location</th>
+                    <th className="pb-3 font-medium text-muted-foreground">Type</th>
+                    <th className="pb-3 font-medium text-muted-foreground">Before</th>
+                    <th className="pb-3 font-medium text-muted-foreground">After</th>
+                    <th className="pb-3 font-medium text-muted-foreground">Relief</th>
+                    <th className="pb-3 font-medium text-muted-foreground">Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[...sessions].reverse().map((s, i) => {
+                    const pct = s.painReductionPercentage ?? 0;
+                    const tier = getReliefBadge(pct);
+                    const arrow = pct > 0 ? "↓" : pct < 0 ? "↑" : "→";
+                    return (
+                      <tr key={i} className="border-b border-border last:border-0">
+                        <td className="py-3 text-foreground">{new Date(s.date).toLocaleDateString()}</td>
+                        <td className="py-3 text-foreground">📍 {s.placement}</td>
+                        <td className="py-3">
+                          <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                            s.painType === "Acute" ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"
+                          }`}>
+                            {s.painType === "Acute" ? "🦴 Musculoskeletal" : "⚡ Neuropathic"}
+                          </span>
+                        </td>
+                        <td className="py-3 text-foreground">{s.initialPain}/10</td>
+                        <td className="py-3 text-foreground">{s.finalPain}/10</td>
+                        <td className="py-3">
+                          <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium border ${tier.border} ${tier.bg} ${tier.text}`}>
+                            {arrow}{pct}% · {tier.label}
+                          </span>
+                        </td>
+                        <td className="py-3 text-muted-foreground max-w-[200px] truncate">{s.patientNotes || "—"}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile cards */}
+            <div className="sm:hidden space-y-2">
+              {[...sessions].reverse().map((s, i) => {
+                const pct = s.painReductionPercentage ?? 0;
+                const tier = getReliefBadge(pct);
+                const arrow = pct > 0 ? "↓" : pct < 0 ? "↑" : "→";
+                return (
+                  <div key={i} className="p-3 rounded-xl border border-border">
+                    <div className="flex flex-wrap items-center gap-2 text-xs mb-2">
+                      <span className="text-muted-foreground">{new Date(s.date).toLocaleDateString()}</span>
+                      <span className={`px-2 py-0.5 rounded-full font-medium ${
+                        s.painType === "Acute" ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"
+                      }`}>
+                        {s.painType === "Acute" ? "🦴 Musculoskeletal" : "⚡ Neuropathic"}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
+                      <span className="text-muted-foreground">📍 {s.placement}</span>
+                      <span className="text-foreground">Pain: {s.initialPain} → {s.finalPain}</span>
+                    </div>
+                    <div className="mt-2">
+                      <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium border ${tier.border} ${tier.bg} ${tier.text}`}>
+                        {arrow}{pct}% · {tier.label}
+                      </span>
+                    </div>
+                    {s.patientNotes && (
+                      <p className="text-xs text-muted-foreground mt-1 truncate">{s.patientNotes}</p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </>
         )}
       </div>
     </div>
@@ -207,13 +243,13 @@ export default function Dashboard() {
 
 function StatCard({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) {
   return (
-    <div className="medical-card flex items-center gap-4">
-      <div className="p-3 rounded-xl bg-primary/10 text-primary">
-        <Icon className="h-5 w-5" />
+    <div className="medical-card flex items-center gap-2 sm:gap-4 p-3 sm:p-6">
+      <div className="p-2 sm:p-3 rounded-xl bg-primary/10 text-primary">
+        <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
       </div>
       <div>
-        <p className="text-sm text-muted-foreground">{label}</p>
-        <p className="text-xl font-display font-bold text-foreground">{value}</p>
+        <p className="text-xs text-muted-foreground">{label}</p>
+        <p className="text-lg sm:text-xl font-display font-bold text-foreground stat-number">{value}</p>
       </div>
     </div>
   );
