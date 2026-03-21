@@ -18,43 +18,44 @@ export default function Education() {
   const [activeTab, setActiveTab] = useState<TabKey>("theory");
   const [selectedPart, setSelectedPart] = useState("");
 
-  const tabs: { key: TabKey; label: string }[] = [
-    { key: "theory", label: "⚡ Gate Control Theory" },
-    { key: "placement", label: "📍 Placement Guide" },
-    { key: "safety", label: "🛡️ Safety & Tips" },
+  const tabs: { key: TabKey; label: string; shortLabel: string }[] = [
+    { key: "theory", label: "⚡ Gate Control Theory", shortLabel: "⚡ Gate Control" },
+    { key: "placement", label: "📍 Placement Guide", shortLabel: "📍 Placement" },
+    { key: "safety", label: "🛡️ Safety & Tips", shortLabel: "🛡️ Safety" },
   ];
 
   return (
-    <div className="container max-w-3xl py-10">
-      <h1 className="font-display text-3xl font-bold text-foreground mb-2">Education Guide</h1>
-      <p className="text-muted-foreground mb-8">Evidence-based information about TENS therapy modes, electrode placement, and safety.</p>
+    <div className="container max-w-3xl py-6 sm:py-10 px-4">
+      <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-2">Education Guide</h1>
+      <p className="text-muted-foreground text-sm mb-6 sm:mb-8">Evidence-based information about TENS therapy modes, electrode placement, and safety.</p>
 
       {/* Tab Bar */}
-      <div className="flex border-b border-border mb-8">
+      <div className="flex border-b border-border mb-6 sm:mb-8">
         {tabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`px-4 py-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
+            className={`px-3 sm:px-4 py-2 sm:py-3 text-sm font-medium transition-colors border-b-2 -mb-px ${
               activeTab === tab.key
                 ? "border-primary text-primary"
                 : "border-transparent text-muted-foreground hover:text-foreground"
             }`}
           >
-            {tab.label}
+            <span className="sm:hidden">{tab.shortLabel}</span>
+            <span className="hidden sm:inline">{tab.label}</span>
           </button>
         ))}
       </div>
 
       {/* Tab 1: Gate Control Theory */}
       {activeTab === "theory" && (
-        <div className="space-y-6">
+        <div className="space-y-5 sm:space-y-6">
           <div className="flex items-start gap-3">
             <div className="inline-flex p-3 rounded-xl bg-primary/10 text-primary shrink-0">
               <Zap className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="font-display text-lg font-bold text-foreground">How TENS Blocks Pain</h2>
+              <h2 className="font-display text-base sm:text-lg font-bold text-foreground">How TENS Blocks Pain</h2>
               <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
                 In 1965, Ronald Melzack and Patrick Wall proposed the Gate Control Theory of Pain. They described a "gating mechanism" in the spinal cord's dorsal horn that modulates the transmission of pain signals to the brain. TENS therapy leverages this mechanism by electrically stimulating sensory nerves.
               </p>
@@ -62,34 +63,34 @@ export default function Education() {
           </div>
 
           {/* 3-column animation cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-5 rounded-xl bg-primary/5">
-            <div className="text-center p-4 rounded-xl bg-card border border-border">
-              <div className="text-3xl mb-2">⚡</div>
-              <h3 className="font-display font-bold text-foreground text-sm">TENS Stimulation</h3>
-              <p className="text-xs text-muted-foreground mt-1">Aβ nerve fiber activation through skin electrodes</p>
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 p-3 sm:p-5 rounded-xl bg-primary/5">
+            <div className="text-center p-2 sm:p-4 rounded-xl bg-card border border-border">
+              <div className="text-xl sm:text-3xl mb-1 sm:mb-2">⚡</div>
+              <h3 className="font-display font-bold text-foreground text-xs sm:text-sm">TENS Stimulation</h3>
+              <p className="text-xs text-muted-foreground mt-1 hidden sm:block">Aβ nerve fiber activation through skin electrodes</p>
             </div>
-            <div className="text-center p-4 rounded-xl bg-card border border-border animate-pulse-subtle">
-              <div className="text-3xl mb-2">🚪</div>
-              <h3 className="font-display font-bold text-foreground text-sm">Gate Closes</h3>
-              <p className="text-xs text-muted-foreground mt-1">Spinal cord dorsal horn inhibits pain transmission</p>
+            <div className="text-center p-2 sm:p-4 rounded-xl bg-card border border-border animate-pulse-subtle">
+              <div className="text-xl sm:text-3xl mb-1 sm:mb-2">🚪</div>
+              <h3 className="font-display font-bold text-foreground text-xs sm:text-sm">Gate Closes</h3>
+              <p className="text-xs text-muted-foreground mt-1 hidden sm:block">Spinal cord dorsal horn inhibits pain transmission</p>
             </div>
-            <div className="text-center p-4 rounded-xl bg-card border border-border">
-              <div className="text-3xl mb-2">🧠</div>
-              <h3 className="font-display font-bold text-foreground text-sm">Pain Reduced</h3>
-              <p className="text-xs text-muted-foreground mt-1">Fewer pain signals reach the brain</p>
+            <div className="text-center p-2 sm:p-4 rounded-xl bg-card border border-border">
+              <div className="text-xl sm:text-3xl mb-1 sm:mb-2">🧠</div>
+              <h3 className="font-display font-bold text-foreground text-xs sm:text-sm">Pain Reduced</h3>
+              <p className="text-xs text-muted-foreground mt-1 hidden sm:block">Fewer pain signals reach the brain</p>
             </div>
           </div>
 
           {/* Two Modes */}
           <h3 className="font-display text-base font-bold text-foreground">Two Modes of Action</h3>
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl border border-border bg-card">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <div className="p-3 sm:p-4 rounded-xl border border-border bg-card">
               <h4 className="font-display font-bold text-foreground text-sm mb-2">High-Frequency TENS (20–120 Hz)</h4>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 Gate control mechanism. Fast onset of relief. Ideal for acute musculoskeletal pain. Uses pulse widths of 50–200 μs.
               </p>
             </div>
-            <div className="p-4 rounded-xl border border-border bg-card">
+            <div className="p-3 sm:p-4 rounded-xl border border-border bg-card">
               <h4 className="font-display font-bold text-foreground text-sm mb-2">Low-Frequency TENS (1–10 Hz)</h4>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 Endorphin release mechanism. Sustained relief over time. Ideal for chronic neuropathic pain. Uses pulse widths of 200–400 μs.
@@ -107,22 +108,22 @@ export default function Education() {
       {activeTab === "placement" && (
         <div className="space-y-5">
           <div className="medical-card-elevated">
-            <div className="flex items-start gap-4 mb-6">
+            <div className="flex items-start gap-4 mb-4 sm:mb-6">
               <div className="inline-flex p-3 rounded-xl text-medical-emerald bg-medical-emerald/10 shrink-0">
                 <BookOpen className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="font-display text-lg font-bold text-foreground">Electrode Placement Guide</h2>
+                <h2 className="font-display text-base sm:text-lg font-bold text-foreground">Electrode Placement Guide</h2>
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
                   Click a body region below to see placement recommendations. Always place electrodes on clean, dry, intact skin.
                 </p>
               </div>
             </div>
 
-            <div className="flex gap-6 flex-col sm:flex-row">
+            <div className="flex gap-4 sm:gap-6 flex-col sm:flex-row">
               {/* Body Map SVG */}
-              <div className="flex-shrink-0 mx-auto sm:mx-0">
-                <svg viewBox="0 0 200 420" className="w-44 h-auto" aria-label="Body map for electrode placement">
+              <div className="flex-shrink-0 mx-auto sm:mx-0 overflow-hidden">
+                <svg viewBox="0 0 200 420" className="w-36 sm:w-44 h-auto" aria-label="Body map for electrode placement">
                   <circle cx="100" cy="30" r="22" fill="hsl(var(--muted))" stroke="hsl(var(--border))" strokeWidth="1.5" />
                   <g>
                     <rect x="90" y="52" width="20" height="18" rx="4" fill="hsl(var(--muted))" stroke="hsl(var(--border))" strokeWidth="1" opacity="0.4" />
@@ -168,7 +169,7 @@ export default function Education() {
                 </div>
 
                 {selectedPart && placementGuides[selectedPart] && (
-                  <div className="p-4 rounded-xl bg-secondary border border-border">
+                  <div className="p-3 sm:p-4 rounded-xl bg-secondary border border-border">
                     <p className="text-sm font-semibold text-foreground mb-1">{selectedPart}</p>
                     <p className="text-sm text-muted-foreground leading-relaxed">{placementGuides[selectedPart]}</p>
                   </div>
@@ -180,7 +181,7 @@ export default function Education() {
               </div>
             </div>
 
-            <div className="mt-5 flex items-start gap-2 p-3 rounded-lg bg-destructive/5 text-sm">
+            <div className="mt-4 sm:mt-5 flex items-start gap-2 p-3 rounded-lg bg-destructive/5 text-sm">
               <ShieldAlert className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
               <span className="text-foreground">
                 Placement on the front or sides of the neck is disabled to prevent carotid sinus stimulation.
@@ -192,9 +193,9 @@ export default function Education() {
 
       {/* Tab 3: Safety & Tips */}
       {activeTab === "safety" && (
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Danger box */}
-          <div className="border-l-4 border-destructive bg-destructive/5 p-5 rounded-r-xl">
+          <div className="border-l-4 border-destructive bg-destructive/5 p-4 sm:p-5 rounded-r-xl">
             <h3 className="font-display font-bold text-foreground mb-3">⛔ Do NOT use TENS if you:</h3>
             <ul className="space-y-2 text-sm text-foreground">
               <li className="flex items-start gap-2"><span className="text-destructive shrink-0">•</span>Have a cardiac pacemaker or implanted defibrillator</li>
@@ -205,7 +206,7 @@ export default function Education() {
           </div>
 
           {/* Best Practices box */}
-          <div className="border-l-4 border-primary bg-primary/5 p-5 rounded-r-xl">
+          <div className="border-l-4 border-primary bg-primary/5 p-4 sm:p-5 rounded-r-xl">
             <h3 className="font-display font-bold text-foreground mb-3">✅ Best Practices</h3>
             <ul className="space-y-2 text-sm text-foreground">
               <li className="flex items-start gap-2"><span className="text-primary shrink-0">•</span>Start at the lowest intensity and increase gradually</li>

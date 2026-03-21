@@ -100,6 +100,33 @@
   }
 }
 
+/* ── Mobile condensing ── */
+@media (max-width: 640px) {
+  /* Page containers */
+  .page-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 5rem;
+  }
+
+  /* All cards */
+  .medical-card,
+  .medical-card-elevated {
+    padding: 0.875rem;
+    border-radius: 0.875rem;
+  }
+
+  /* Typography scaling */
+  h1 { font-size: 1.75rem; line-height: 2rem; }
+  h2 { font-size: 1.25rem; line-height: 1.75rem; }
+  h3 { font-size: 1rem; line-height: 1.5rem; }
+
+  .timer-display { font-size: 4.5rem; line-height: 1; }
+  .stat-number { font-size: 1.75rem; line-height: 2rem; }
+  .reduction-pct { font-size: 2rem; }
+}
+
 @media print {
   .no-print {
     display: none !important;
