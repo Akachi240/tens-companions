@@ -104,6 +104,9 @@ export default function SettingsPage() {
       </div>
 
       {/* Medications */}
+      {/* Session Reminders */}
+      <NotificationCard />
+
       {activeProfile && (
         <div className="medical-card-elevated">
           <h2 className="font-display text-lg font-bold text-foreground mb-4 flex items-center gap-2">
