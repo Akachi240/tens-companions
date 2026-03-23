@@ -21,7 +21,6 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
 
-  // Network-first for navigation / API
   if (request.mode === 'navigate' || request.url.includes('/api/')) {
     event.respondWith(
       fetch(request)
@@ -35,7 +34,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Cache-first for assets
   event.respondWith(
     caches.match(request).then((cached) => {
       if (cached) return cached;
@@ -44,6 +42,18 @@ self.addEventListener('fetch', (event) => {
         caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
         return res;
       });
+    })
+  );
+});
+
+self.addEventListener('push', (event) => {
+  const data = event.data ? event.data.json() : {};
+  event.waitUntil(
+    self.registration.showNotification(data.title || 'TensPilot+ 💙', {
+      body: data.body || 'Time for your TENS therapy session today.',
+      icon: '/icons/icon-192x192.svg',
+      badge: '/icons/icon-192x192.svg',
+      tag: 'session-reminder',
     })
   );
 });
