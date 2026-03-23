@@ -117,6 +117,18 @@
     border-radius: 0.875rem;
   }
 
+  /* Section gaps */
+  [class*="gap-6"] { gap: 0.75rem; }
+  [class*="gap-4"] { gap: 0.625rem; }
+
+  /* Section vertical spacing */
+  [class*="py-8"]  { padding-top: 1rem; padding-bottom: 1rem; }
+  [class*="py-6"]  { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+  [class*="mt-6"]  { margin-top: 0.75rem; }
+  [class*="mb-6"]  { margin-bottom: 0.75rem; }
+  [class*="space-y-6"] > * + * { margin-top: 0.75rem; }
+  [class*="space-y-4"] > * + * { margin-top: 0.5rem; }
+
   /* Typography scaling */
   h1 { font-size: 1.75rem; line-height: 2rem; }
   h2 { font-size: 1.25rem; line-height: 1.75rem; }
