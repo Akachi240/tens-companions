@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useProfile } from "@/context/ProfileContext";
-import { UserPlus, Trash2, Pill, Plus, X, CheckCircle2 } from "lucide-react";
+import { UserPlus, Trash2, Pill, Plus, X, CheckCircle2, Bell } from "lucide-react";
 
 export default function SettingsPage() {
   const {
