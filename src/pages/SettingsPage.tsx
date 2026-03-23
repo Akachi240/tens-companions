@@ -155,3 +155,74 @@ export default function SettingsPage() {
     </div>
   );
 }
+
+const NOTIF_KEY = "tenspilot-notif-prefs";
+
+function NotificationCard() {
+  const [enabled, setEnabled] = useState(false);
+  const [time, setTime] = useState("09:00");
+  const [status, setStatus] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(NOTIF_KEY);
+      if (raw) {
+        const prefs = JSON.parse(raw);
+        setEnabled(prefs.enabled ?? false);
+        setTime(prefs.time ?? "09:00");
+      }
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(NOTIF_KEY, JSON.stringify({ enabled, time }));
+  }, [enabled, time]);
+
+  const handleToggle = async () => {
+    if (!enabled) {
+      if (!("Notification" in window)) {
+        setStatus("⚠️ Notifications not supported");
+        return;
+      }
+      const perm = await Notification.requestPermission();
+      if (perm === "granted") {
+        setEnabled(true);
+        setStatus("✅ Notifications enabled");
+      } else {
+        setStatus("⚠️ Please enable in browser settings");
+      }
+    } else {
+      setEnabled(false);
+      setStatus(null);
+    }
+  };
+
+  return (
+    <div className="medical-card-elevated mb-6">
+      <h2 className="font-display text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+        <Bell className="h-5 w-5 text-primary" /> 🔔 Session Reminders
+      </h2>
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-sm text-foreground">Enable daily reminders</span>
+        <button
+          onClick={handleToggle}
+          className={`relative w-11 h-6 rounded-full transition ${enabled ? "bg-primary" : "bg-border"}`}
+        >
+          <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${enabled ? "translate-x-5" : ""}`} />
+        </button>
+      </div>
+      {status && <p className="text-xs text-muted-foreground mb-3">{status}</p>}
+      {enabled && (
+        <div>
+          <label className="text-sm text-muted-foreground">Daily reminder time</label>
+          <input
+            type="time"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+            className="w-full mt-1 px-3 py-2 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+          />
+        </div>
+      )}
+    </div>
+  );
+}
