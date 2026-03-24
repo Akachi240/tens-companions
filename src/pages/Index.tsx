@@ -7,32 +7,24 @@ const features = [
     icon: Zap,
     title: "Setup Session",
     description: "Configure your personalised TENS parameters",
-    iconBg: "bg-primary/10",
-    iconColor: "text-primary",
   },
   {
     to: "/active-session",
     icon: Activity,
     title: "Active Therapy",
     description: "Run your session with real-time guidance",
-    iconBg: "bg-accent/10",
-    iconColor: "text-accent",
   },
   {
     to: "/education",
     icon: BookOpen,
     title: "Education Guide",
     description: "Learn the science behind TENS therapy",
-    iconBg: "bg-medical-emerald/10",
-    iconColor: "text-medical-emerald",
   },
   {
     to: "/dashboard",
     icon: BarChart3,
     title: "My Dashboard",
     description: "Track progress and export clinical reports",
-    iconBg: "bg-medical-warning/10",
-    iconColor: "text-medical-warning",
   },
 ];
 
@@ -54,14 +46,13 @@ export default function Index() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[hsl(199_89%_97%)] to-[hsl(199_89%_94%)]">
-        <div className="absolute inset-0 gradient-medical-bg opacity-[0.04]" />
+      <section className="relative overflow-hidden">
         <div className="container py-8 md:py-24 text-center relative">
           <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium mb-6">
             <Zap className="h-4 w-4" />
             Clinical-Grade TENS Companion
           </div>
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight max-w-3xl mx-auto">
+          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight max-w-3xl mx-auto">
             Your Intelligent{" "}
             <span className="text-primary">TENS Therapy</span>{" "}
             Companion
@@ -78,7 +69,7 @@ export default function Index() {
             </Link>
             <Link
               to="/education"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-border bg-card text-foreground font-semibold hover:bg-muted transition w-full sm:w-auto"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-primary/40 bg-white/40 backdrop-blur-sm text-primary font-semibold hover:bg-white/60 transition w-full sm:w-auto"
             >
               Learn More
             </Link>
@@ -88,7 +79,7 @@ export default function Index() {
 
       {/* Feature Grid */}
       <section className="container py-16">
-        <h2 className="font-display text-2xl font-bold text-foreground mb-8 text-center">
+        <h2 className="font-display text-2xl font-bold mb-8 text-center">
           Your Complete TENS Therapy Toolkit
         </h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
@@ -98,10 +89,10 @@ export default function Index() {
               to={f.to}
               className="medical-card-elevated group hover:shadow-lg transition-shadow"
             >
-              <div className={`inline-flex p-2.5 sm:p-3 rounded-xl ${f.iconBg} ${f.iconColor} mb-4`}>
+              <div className="inline-flex p-2.5 sm:p-3 rounded-xl bg-[var(--surface-tint)] text-primary mb-4">
                 <f.icon className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
-              <h3 className="font-display font-bold text-foreground text-base sm:text-lg">{f.title}</h3>
+              <h3 className="font-display font-bold text-base sm:text-lg">{f.title}</h3>
               <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed hidden sm:block">{f.description}</p>
               <span className="mt-3 inline-flex items-center text-sm font-medium text-primary gap-1 group-hover:gap-2 transition-all">
                 Open <ArrowRight className="h-3.5 w-3.5" />
@@ -112,10 +103,10 @@ export default function Index() {
       </section>
 
       {/* How TENS Works — Desktop */}
-      <section className="bg-gradient-to-bl from-[hsl(199_89%_97%)] to-white py-16 hidden md:block">
+      <section className="py-16 hidden md:block">
         <div className="container flex flex-row gap-12 items-start">
           <div className="md:w-1/2">
-            <h2 className="font-display text-2xl font-bold text-foreground mb-4">
+            <h2 className="font-display text-2xl font-bold mb-4">
               How TENS Therapy Works
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-6">
@@ -124,7 +115,7 @@ export default function Index() {
             <ul className="space-y-3">
               {bulletPoints.map((point) => (
                 <li key={point} className="flex items-center gap-3">
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-medical-emerald text-white shrink-0">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground shrink-0">
                     <Check className="h-3.5 w-3.5" />
                   </div>
                   <span className="text-foreground text-sm font-medium">{point}</span>
@@ -134,11 +125,11 @@ export default function Index() {
           </div>
 
           <div className="md:w-1/2">
-            <div className="bg-card shadow-lg border border-border rounded-2xl p-6">
+            <div className="medical-card-elevated">
               {steps.map((s, i) => (
                 <div key={s.label}>
                   <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[hsl(199_89%_94%)] text-primary shrink-0">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--surface-tint)] text-primary shrink-0">
                       <s.icon className="h-5 w-5" />
                     </div>
                     <div>
@@ -158,10 +149,10 @@ export default function Index() {
 
       {/* How TENS Works — Mobile simplified */}
       <section className="flex md:hidden flex-col gap-3 py-6 container">
-        <h2 className="font-display text-xl font-bold text-foreground mb-1">How It Works</h2>
-        {steps.map((s, i) => (
+        <h2 className="font-display text-xl font-bold mb-1">How It Works</h2>
+        {steps.map((s) => (
           <div key={s.label} className="flex items-center gap-3 text-sm text-muted-foreground">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-primary shrink-0">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface-tint)] text-primary shrink-0">
               <s.icon className="h-4 w-4" />
             </div>
             <span className="text-foreground font-medium">{s.emoji} {s.label}</span>

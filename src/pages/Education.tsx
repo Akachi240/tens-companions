@@ -26,11 +26,11 @@ export default function Education() {
 
   return (
     <div className="container max-w-3xl py-6 sm:py-10 px-4">
-      <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-2">Education Guide</h1>
+      <h1 className="font-display text-2xl sm:text-3xl font-bold mb-2">Education Guide</h1>
       <p className="text-muted-foreground text-sm mb-6 sm:mb-8">Evidence-based information about TENS therapy modes, electrode placement, and safety.</p>
 
       {/* Tab Bar */}
-      <div className="flex border-b border-border mb-6 sm:mb-8">
+      <div className="flex border-b border-white/40 mb-6 sm:mb-8">
         {tabs.map((tab) => (
           <button
             key={tab.key}
@@ -51,11 +51,11 @@ export default function Education() {
       {activeTab === "theory" && (
         <div className="space-y-5 sm:space-y-6">
           <div className="flex items-start gap-3">
-            <div className="inline-flex p-3 rounded-xl bg-primary/10 text-primary shrink-0">
+            <div className="inline-flex p-3 rounded-xl bg-[var(--surface-tint)] text-primary shrink-0">
               <Zap className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="font-display text-base sm:text-lg font-bold text-foreground">How TENS Blocks Pain</h2>
+              <h2 className="font-display text-base sm:text-lg font-bold">How TENS Blocks Pain</h2>
               <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
                 In 1965, Ronald Melzack and Patrick Wall proposed the Gate Control Theory of Pain. They described a "gating mechanism" in the spinal cord's dorsal horn that modulates the transmission of pain signals to the brain. TENS therapy leverages this mechanism by electrically stimulating sensory nerves.
               </p>
@@ -63,18 +63,18 @@ export default function Education() {
           </div>
 
           {/* 3-column animation cards */}
-          <div className="grid grid-cols-3 gap-2 sm:gap-4 p-3 sm:p-5 rounded-xl bg-primary/5">
-            <div className="text-center p-2 sm:p-4 rounded-xl bg-card border border-border">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 p-3 sm:p-5 rounded-xl bg-white/30 backdrop-blur-sm">
+            <div className="text-center p-2 sm:p-4 rounded-xl bg-white/50 backdrop-blur-sm border border-white/40">
               <div className="text-xl sm:text-3xl mb-1 sm:mb-2">⚡</div>
               <h3 className="font-display font-bold text-foreground text-xs sm:text-sm">TENS Stimulation</h3>
               <p className="text-xs text-muted-foreground mt-1 hidden sm:block">Aβ nerve fiber activation through skin electrodes</p>
             </div>
-            <div className="text-center p-2 sm:p-4 rounded-xl bg-card border border-border animate-pulse-subtle">
+            <div className="text-center p-2 sm:p-4 rounded-xl bg-white/50 backdrop-blur-sm border border-white/40 animate-pulse-subtle">
               <div className="text-xl sm:text-3xl mb-1 sm:mb-2">🚪</div>
               <h3 className="font-display font-bold text-foreground text-xs sm:text-sm">Gate Closes</h3>
               <p className="text-xs text-muted-foreground mt-1 hidden sm:block">Spinal cord dorsal horn inhibits pain transmission</p>
             </div>
-            <div className="text-center p-2 sm:p-4 rounded-xl bg-card border border-border">
+            <div className="text-center p-2 sm:p-4 rounded-xl bg-white/50 backdrop-blur-sm border border-white/40">
               <div className="text-xl sm:text-3xl mb-1 sm:mb-2">🧠</div>
               <h3 className="font-display font-bold text-foreground text-xs sm:text-sm">Pain Reduced</h3>
               <p className="text-xs text-muted-foreground mt-1 hidden sm:block">Fewer pain signals reach the brain</p>
@@ -82,15 +82,15 @@ export default function Education() {
           </div>
 
           {/* Two Modes */}
-          <h3 className="font-display text-base font-bold text-foreground">Two Modes of Action</h3>
+          <h3 className="font-display text-base font-bold">Two Modes of Action</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            <div className="p-3 sm:p-4 rounded-xl border border-border bg-card">
+            <div className="p-3 sm:p-4 rounded-xl border border-white/40 bg-white/50 backdrop-blur-sm">
               <h4 className="font-display font-bold text-foreground text-sm mb-2">High-Frequency TENS (20–120 Hz)</h4>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 Gate control mechanism. Fast onset of relief. Ideal for acute musculoskeletal pain. Uses pulse widths of 50–200 μs.
               </p>
             </div>
-            <div className="p-3 sm:p-4 rounded-xl border border-border bg-card">
+            <div className="p-3 sm:p-4 rounded-xl border border-white/40 bg-white/50 backdrop-blur-sm">
               <h4 className="font-display font-bold text-foreground text-sm mb-2">Low-Frequency TENS (1–10 Hz)</h4>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 Endorphin release mechanism. Sustained relief over time. Ideal for chronic neuropathic pain. Uses pulse widths of 200–400 μs.
@@ -109,11 +109,11 @@ export default function Education() {
         <div className="space-y-5">
           <div className="medical-card-elevated">
             <div className="flex items-start gap-4 mb-4 sm:mb-6">
-              <div className="inline-flex p-3 rounded-xl text-medical-emerald bg-medical-emerald/10 shrink-0">
+              <div className="inline-flex p-3 rounded-xl text-primary bg-[var(--surface-tint)] shrink-0">
                 <BookOpen className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="font-display text-base sm:text-lg font-bold text-foreground">Electrode Placement Guide</h2>
+                <h2 className="font-display text-base sm:text-lg font-bold">Electrode Placement Guide</h2>
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
                   Click a body region below to see placement recommendations. Always place electrodes on clean, dry, intact skin.
                 </p>
@@ -159,8 +159,8 @@ export default function Education() {
                       onClick={() => setSelectedPart(loc)}
                       className={`p-3 rounded-xl border text-left text-sm font-medium transition ${
                         selectedPart === loc
-                          ? "border-primary bg-secondary text-secondary-foreground"
-                          : "border-border hover:border-primary/40 text-foreground"
+                          ? "border-primary bg-primary/10 text-primary"
+                          : "border-white/40 bg-white/30 hover:border-primary/40 text-foreground"
                       }`}
                     >
                       {loc}
@@ -169,7 +169,7 @@ export default function Education() {
                 </div>
 
                 {selectedPart && placementGuides[selectedPart] && (
-                  <div className="p-3 sm:p-4 rounded-xl bg-secondary border border-border">
+                  <div className="p-3 sm:p-4 rounded-xl bg-white/50 backdrop-blur-sm border border-white/40">
                     <p className="text-sm font-semibold text-foreground mb-1">{selectedPart}</p>
                     <p className="text-sm text-muted-foreground leading-relaxed">{placementGuides[selectedPart]}</p>
                   </div>
@@ -194,9 +194,8 @@ export default function Education() {
       {/* Tab 3: Safety & Tips */}
       {activeTab === "safety" && (
         <div className="space-y-4 sm:space-y-6">
-          {/* Danger box */}
           <div className="border-l-4 border-destructive bg-destructive/5 p-4 sm:p-5 rounded-r-xl">
-            <h3 className="font-display font-bold text-foreground mb-3">⛔ Do NOT use TENS if you:</h3>
+            <h3 className="font-display font-bold mb-3">⛔ Do NOT use TENS if you:</h3>
             <ul className="space-y-2 text-sm text-foreground">
               <li className="flex items-start gap-2"><span className="text-destructive shrink-0">•</span>Have a cardiac pacemaker or implanted defibrillator</li>
               <li className="flex items-start gap-2"><span className="text-destructive shrink-0">•</span>Have epilepsy or a seizure disorder</li>
@@ -205,9 +204,8 @@ export default function Education() {
             </ul>
           </div>
 
-          {/* Best Practices box */}
           <div className="border-l-4 border-primary bg-primary/5 p-4 sm:p-5 rounded-r-xl">
-            <h3 className="font-display font-bold text-foreground mb-3">✅ Best Practices</h3>
+            <h3 className="font-display font-bold mb-3">✅ Best Practices</h3>
             <ul className="space-y-2 text-sm text-foreground">
               <li className="flex items-start gap-2"><span className="text-primary shrink-0">•</span>Start at the lowest intensity and increase gradually</li>
               <li className="flex items-start gap-2"><span className="text-primary shrink-0">•</span>Ensure skin is clean and dry before applying electrodes</li>

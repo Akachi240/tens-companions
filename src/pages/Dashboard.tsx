@@ -79,7 +79,7 @@ export default function Dashboard() {
     <div className="container max-w-4xl py-6 sm:py-10 px-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 sm:mb-8">
         <div>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold text-foreground">Dashboard</h1>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold">Dashboard</h1>
           <p className="text-muted-foreground text-sm">{activeProfile.name}'s therapy overview</p>
         </div>
         <button
@@ -104,17 +104,17 @@ export default function Dashboard() {
       {/* Therapy Insights */}
       {sessions.length > 0 && (
         <div className="medical-card-elevated mb-4 sm:mb-6">
-          <h2 className="font-display text-base sm:text-lg font-bold text-foreground mb-3 sm:mb-4">Therapy Insights</h2>
+          <h2 className="font-display text-base sm:text-lg font-bold mb-3 sm:mb-4">Therapy Insights</h2>
           <div className="grid grid-cols-2 gap-2 sm:gap-4">
-            <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-secondary border border-border">
-              <div className="p-2 sm:p-2.5 rounded-lg bg-primary/10 text-primary"><MapPin className="h-4 w-4 sm:h-5 sm:w-5" /></div>
+            <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/50 backdrop-blur-sm border border-white/40">
+              <div className="p-2 sm:p-2.5 rounded-lg bg-[var(--surface-tint)] text-primary"><MapPin className="h-4 w-4 sm:h-5 sm:w-5" /></div>
               <div>
                 <p className="text-xs text-muted-foreground">Most Treated</p>
                 <p className="text-sm sm:text-base font-display font-bold text-foreground">{mostTreatedLocation}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-secondary border border-border">
-              <div className="p-2 sm:p-2.5 rounded-lg bg-accent/10 text-accent"><Zap className="h-4 w-4 sm:h-5 sm:w-5" /></div>
+            <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white/50 backdrop-blur-sm border border-white/40">
+              <div className="p-2 sm:p-2.5 rounded-lg bg-[var(--surface-tint)] text-accent"><Zap className="h-4 w-4 sm:h-5 sm:w-5" /></div>
               <div>
                 <p className="text-xs text-muted-foreground">Best Mode</p>
                 <p className="text-sm sm:text-base font-display font-bold text-foreground">{mostEffectiveMode}</p>
@@ -128,7 +128,7 @@ export default function Dashboard() {
       <ProgressMilestones sessions={sessions} />
 
       {/* Tab bar */}
-      <div className="flex border-b border-border mb-4 sm:mb-6 overflow-x-auto">
+      <div className="flex border-b border-white/40 mb-4 sm:mb-6 overflow-x-auto">
         {tabs.map((t) => (
           <button
             key={t.key}
@@ -150,17 +150,17 @@ export default function Dashboard() {
         <>
           {chartData.length > 0 && (
             <div className="medical-card-elevated mb-6 sm:mb-8">
-              <h2 className="font-display text-base sm:text-lg font-bold text-foreground mb-3 sm:mb-4">Pain Trend</h2>
+              <h2 className="font-display text-base sm:text-lg font-bold mb-3 sm:mb-4">Pain Trend</h2>
               <div className="h-48 sm:h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(210 18% 90%)" />
-                    <XAxis dataKey="name" tick={{ fontSize: 11 }} stroke="hsl(210 10% 50%)" />
-                    <YAxis domain={[0, 10]} tick={{ fontSize: 11 }} stroke="hsl(210 10% 50%)" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.4)" />
+                    <XAxis dataKey="name" tick={{ fontSize: 11 }} stroke="#7a90a8" />
+                    <YAxis domain={[0, 10]} tick={{ fontSize: 11 }} stroke="#7a90a8" />
                     <Tooltip />
                     <Legend />
-                    <Line type="monotone" dataKey="Initial Pain" stroke="hsl(0 72% 51%)" strokeWidth={2} dot={{ r: 3 }} />
-                    <Line type="monotone" dataKey="Final Pain" stroke="hsl(173 58% 39%)" strokeWidth={2} dot={{ r: 3 }} />
+                    <Line type="monotone" dataKey="Initial Pain" stroke="#dc2626" strokeWidth={2} dot={{ r: 3 }} />
+                    <Line type="monotone" dataKey="Final Pain" stroke="#4a8fc4" strokeWidth={2} dot={{ r: 3 }} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -168,7 +168,7 @@ export default function Dashboard() {
           )}
           {/* Quick session list */}
           <div className="medical-card-elevated">
-            <h2 className="font-display text-base sm:text-lg font-bold text-foreground mb-3 sm:mb-4">Recent Sessions</h2>
+            <h2 className="font-display text-base sm:text-lg font-bold mb-3 sm:mb-4">Recent Sessions</h2>
             {sessions.length === 0 ? (
               <p className="text-muted-foreground text-sm">No sessions recorded yet.</p>
             ) : (
@@ -178,7 +178,7 @@ export default function Dashboard() {
                   const tier = getReliefBadge(pct);
                   const arrow = pct > 0 ? "↓" : pct < 0 ? "↑" : "→";
                   return (
-                    <div key={i} className="p-3 rounded-xl border border-border flex items-center justify-between text-xs">
+                    <div key={i} className="p-3 rounded-xl border border-white/40 bg-white/30 flex items-center justify-between text-xs">
                       <span className="text-muted-foreground">{new Date(s.date).toLocaleDateString()}</span>
                       <span className="text-foreground">📍 {s.placement}</span>
                       <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-medium border ${tier.border} ${tier.bg} ${tier.text}`}>
@@ -195,7 +195,7 @@ export default function Dashboard() {
 
       {activeTab === "history" && (
         <div className="medical-card-elevated">
-          <h2 className="font-display text-base sm:text-lg font-bold text-foreground mb-3 sm:mb-4">Session History</h2>
+          <h2 className="font-display text-base sm:text-lg font-bold mb-3 sm:mb-4">Session History</h2>
           {sessions.length === 0 ? (
             <p className="text-muted-foreground text-sm">No sessions recorded yet.</p>
           ) : (
@@ -203,7 +203,7 @@ export default function Dashboard() {
               <div className="hidden sm:block overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-border text-left">
+                    <tr className="border-b border-white/40 text-left">
                       <th className="pb-3 font-medium text-muted-foreground">Date</th>
                       <th className="pb-3 font-medium text-muted-foreground">Location</th>
                       <th className="pb-3 font-medium text-muted-foreground">Type</th>
@@ -219,7 +219,7 @@ export default function Dashboard() {
                       const tier = getReliefBadge(pct);
                       const arrow = pct > 0 ? "↓" : pct < 0 ? "↑" : "→";
                       return (
-                        <tr key={i} className="border-b border-border last:border-0">
+                        <tr key={i} className="border-b border-white/30 last:border-0">
                           <td className="py-3 text-foreground">{new Date(s.date).toLocaleDateString()}</td>
                           <td className="py-3 text-foreground">📍 {s.placement}</td>
                           <td className="py-3">
@@ -247,7 +247,7 @@ export default function Dashboard() {
                   const tier = getReliefBadge(pct);
                   const arrow = pct > 0 ? "↓" : pct < 0 ? "↑" : "→";
                   return (
-                    <div key={i} className="p-3 rounded-xl border border-border">
+                    <div key={i} className="p-3 rounded-xl border border-white/40 bg-white/30">
                       <div className="flex flex-wrap items-center gap-2 text-xs mb-2">
                         <span className="text-muted-foreground">{new Date(s.date).toLocaleDateString()}</span>
                         <span className={`px-2 py-0.5 rounded-full font-medium ${s.painType === "Acute" ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"}`}>
@@ -275,20 +275,20 @@ export default function Dashboard() {
 
       {activeTab === "charts" && (
         <div className="medical-card-elevated">
-          <h2 className="font-display text-base sm:text-lg font-bold text-foreground mb-3 sm:mb-4">Pain Trend Chart</h2>
+          <h2 className="font-display text-base sm:text-lg font-bold mb-3 sm:mb-4">Pain Trend Chart</h2>
           {chartData.length === 0 ? (
             <p className="text-muted-foreground text-sm">No data to chart yet.</p>
           ) : (
             <div className="h-48 sm:h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(210 18% 90%)" />
-                  <XAxis dataKey="name" tick={{ fontSize: 11 }} stroke="hsl(210 10% 50%)" />
-                  <YAxis domain={[0, 10]} tick={{ fontSize: 11 }} stroke="hsl(210 10% 50%)" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.4)" />
+                  <XAxis dataKey="name" tick={{ fontSize: 11 }} stroke="#7a90a8" />
+                  <YAxis domain={[0, 10]} tick={{ fontSize: 11 }} stroke="#7a90a8" />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="Initial Pain" stroke="hsl(0 72% 51%)" strokeWidth={2} dot={{ r: 3 }} />
-                  <Line type="monotone" dataKey="Final Pain" stroke="hsl(173 58% 39%)" strokeWidth={2} dot={{ r: 3 }} />
+                  <Line type="monotone" dataKey="Initial Pain" stroke="#dc2626" strokeWidth={2} dot={{ r: 3 }} />
+                  <Line type="monotone" dataKey="Final Pain" stroke="#4a8fc4" strokeWidth={2} dot={{ r: 3 }} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -306,7 +306,7 @@ export default function Dashboard() {
 function StatCard({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) {
   return (
     <div className="medical-card flex items-center gap-2 sm:gap-4 p-3 sm:p-6">
-      <div className="p-2 sm:p-3 rounded-xl bg-primary/10 text-primary">
+      <div className="p-2 sm:p-3 rounded-xl bg-[var(--surface-tint)] text-primary">
         <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
       </div>
       <div>

@@ -61,7 +61,7 @@ export default function PainJournal() {
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          className="w-full px-3 py-2 rounded-xl border border-border bg-background text-foreground text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-ring"
+          className="w-full px-3 py-2 rounded-xl border border-white/60 bg-white/40 backdrop-blur-sm text-foreground text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-ring"
         />
         <p className="text-xs text-muted-foreground mb-2">Pain Level</p>
         <div className="flex flex-wrap justify-center gap-1.5 mb-3">
@@ -72,7 +72,7 @@ export default function PainJournal() {
               className={`w-9 h-9 rounded-full border-2 font-semibold text-xs transition-all ${
                 painLevel === i
                   ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border bg-background text-foreground hover:border-primary/40"
+                  : "border-white/60 bg-white/40 text-foreground hover:border-primary/40"
               }`}
             >
               {i}
@@ -84,7 +84,7 @@ export default function PainJournal() {
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           rows={2}
-          className="w-full rounded-xl border border-border p-3 text-sm resize-none mb-3 focus:outline-none focus:ring-2 focus:ring-ring"
+          className="w-full rounded-xl border border-white/60 bg-white/40 backdrop-blur-sm p-3 text-sm resize-none mb-3 focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-[var(--ink-subtle)]"
         />
         <button
           onClick={handleSave}

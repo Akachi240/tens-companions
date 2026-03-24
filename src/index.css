@@ -2,57 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
-
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 210 25% 12%;
+    --background: 214 33% 97%;
+    --background-fallback: #f4f7fb;
+    --foreground: 215 62% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 210 25% 12%;
+    --card-foreground: 215 62% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 210 25% 12%;
+    --popover-foreground: 215 62% 15%;
 
-    --primary: 199 89% 48%;
+    --primary: 208 57% 42%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 199 30% 94%;
-    --secondary-foreground: 199 60% 30%;
+    --secondary: 210 33% 95%;
+    --secondary-foreground: 208 57% 42%;
 
-    --muted: 210 15% 95%;
-    --muted-foreground: 210 10% 50%;
+    --muted: 210 25% 93%;
+    --muted-foreground: 212 22% 57%;
 
-    --accent: 173 58% 39%;
+    --accent: 207 50% 53%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 18% 90%;
-    --input: 210 18% 90%;
-    --ring: 199 89% 48%;
+    --border: 210 30% 90%;
+    --input: 210 30% 90%;
+    --ring: 208 57% 42%;
 
     --radius: 0.75rem;
 
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 210 25% 12%;
-    --sidebar-primary: 199 89% 48%;
+    --sidebar-foreground: 215 62% 15%;
+    --sidebar-primary: 208 57% 42%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 199 30% 94%;
-    --sidebar-accent-foreground: 199 60% 30%;
-    --sidebar-border: 210 18% 90%;
-    --sidebar-ring: 199 89% 48%;
+    --sidebar-accent: 207 50% 90%;
+    --sidebar-accent-foreground: 208 57% 42%;
+    --sidebar-border: 210 30% 90%;
+    --sidebar-ring: 208 57% 42%;
 
-    /* Custom tokens */
-    --medical-teal: 173 58% 39%;
-    --medical-sky: 199 89% 48%;
-    --medical-sky-dark: 199 89% 38%;
-    --medical-emerald: 160 84% 39%;
-    --medical-warning: 38 92% 50%;
-    --medical-surface: 199 30% 97%;
-    --gradient-medical: linear-gradient(135deg, hsl(199 89% 48%), hsl(173 58% 39%));
+    /* Custom glassmorphism tokens */
+    --surface: rgba(255, 255, 255, 0.70);
+    --surface-tint: rgba(220, 232, 245, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --ink: #0f2340;
+    --ink-muted: #7a90a8;
+    --ink-subtle: #b0c4d8;
+    --accent-hex: #4a8fc4;
+    --accent-dark-hex: #2e6faa;
+    --gradient-medical: linear-gradient(135deg, #2e6faa, #4a8fc4);
     --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
     --shadow-elevated: 0 4px 16px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
   }
@@ -64,28 +65,52 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply text-foreground antialiased;
+    font-family: 'Jost', system-ui, sans-serif;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    background-color: var(--background-fallback);
+    background-image: url('/blue-wave-bg.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--ink);
   }
 }
 
 @layer components {
   .medical-card {
-    @apply bg-card rounded-xl border border-border p-6;
+    background: var(--surface);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
     box-shadow: var(--shadow-card);
   }
 
   .medical-card-elevated {
-    @apply bg-card rounded-xl border border-border p-6;
+    background: var(--surface);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
     box-shadow: var(--shadow-elevated);
   }
 
   .gradient-medical-bg {
     background: var(--gradient-medical);
+  }
+
+  .glass-header {
+    background: rgba(255, 255, 255, 0.60);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--glass-border);
   }
 
   .breathing-circle {
@@ -102,26 +127,19 @@
 
 /* ── Mobile condensing ── */
 @media (max-width: 640px) {
-  /* Page containers */
   .page-container {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 1rem;
-    padding-bottom: 5rem;
+    padding: 1rem 1rem 5rem;
   }
 
-  /* All cards */
   .medical-card,
   .medical-card-elevated {
     padding: 0.875rem;
-    border-radius: 0.875rem;
+    border-radius: 14px;
   }
 
-  /* Section gaps */
   [class*="gap-6"] { gap: 0.75rem; }
   [class*="gap-4"] { gap: 0.625rem; }
 
-  /* Section vertical spacing */
   [class*="py-8"]  { padding-top: 1rem; padding-bottom: 1rem; }
   [class*="py-6"]  { padding-top: 0.75rem; padding-bottom: 0.75rem; }
   [class*="mt-6"]  { margin-top: 0.75rem; }
@@ -129,7 +147,6 @@
   [class*="space-y-6"] > * + * { margin-top: 0.75rem; }
   [class*="space-y-4"] > * + * { margin-top: 0.5rem; }
 
-  /* Typography scaling */
   h1 { font-size: 1.75rem; line-height: 2rem; }
   h2 { font-size: 1.25rem; line-height: 1.75rem; }
   h3 { font-size: 1rem; line-height: 1.5rem; }
