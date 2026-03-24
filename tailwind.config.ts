@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-        display: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+        sans: ["Jost", "system-ui", "sans-serif"],
+        display: ["Cormorant Garamond", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -50,14 +50,6 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
-        },
-        medical: {
-          teal: "hsl(var(--medical-teal))",
-          sky: "hsl(var(--medical-sky))",
-          "sky-dark": "hsl(var(--medical-sky-dark))",
-          emerald: "hsl(var(--medical-emerald))",
-          warning: "hsl(var(--medical-warning))",
-          surface: "hsl(var(--medical-surface))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",

@@ -40,15 +40,15 @@ export default function ProgressMilestones({ sessions }: { sessions: SessionReco
 
   return (
     <div className="medical-card-elevated mb-6 sm:mb-8">
-      <h2 className="font-display text-base sm:text-lg font-bold text-foreground mb-3 sm:mb-4">🏆 Progress Milestones</h2>
+      <h2 className="font-display text-base sm:text-lg font-bold mb-3 sm:mb-4">🏆 Progress Milestones</h2>
       <div className="flex flex-wrap gap-2 sm:gap-3">
         {milestones.map((m) => (
           <div
             key={m.title}
             className={`rounded-xl border p-3 text-center text-xs min-w-[5.5rem] ${
               m.earned
-                ? "medical-card border-primary/20"
-                : "bg-muted/30 border-border opacity-50"
+                ? "bg-white/70 backdrop-blur-sm border-primary/20"
+                : "bg-white/20 border-white/30 opacity-50"
             }`}
           >
             <div className="text-2xl mb-1">{m.emoji}</div>

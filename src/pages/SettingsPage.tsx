@@ -33,11 +33,11 @@ export default function SettingsPage() {
 
   return (
     <div className="container max-w-2xl py-10">
-      <h1 className="font-display text-3xl font-bold text-foreground mb-8">Settings</h1>
+      <h1 className="font-display text-3xl font-bold mb-8">Settings</h1>
 
       {/* Add Profile */}
       <div className="medical-card-elevated mb-6">
-        <h2 className="font-display text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+        <h2 className="font-display text-lg font-bold mb-4 flex items-center gap-2">
           <UserPlus className="h-5 w-5 text-primary" /> Add Patient Profile
         </h2>
         <div className="flex flex-col sm:flex-row gap-3">
@@ -45,13 +45,13 @@ export default function SettingsPage() {
             placeholder="Patient name"
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
-            className="flex-1 px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            className="flex-1 px-4 py-2.5 rounded-xl border border-white/60 bg-white/40 backdrop-blur-sm text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-[var(--ink-subtle)]"
           />
           <input
             placeholder="Primary condition"
             value={newCondition}
             onChange={(e) => setNewCondition(e.target.value)}
-            className="flex-1 px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            className="flex-1 px-4 py-2.5 rounded-xl border border-white/60 bg-white/40 backdrop-blur-sm text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-[var(--ink-subtle)]"
           />
           <button
             onClick={handleAddProfile}
@@ -64,7 +64,7 @@ export default function SettingsPage() {
 
       {/* Profile List */}
       <div className="medical-card-elevated mb-6">
-        <h2 className="font-display text-lg font-bold text-foreground mb-4">Patient Profiles</h2>
+        <h2 className="font-display text-lg font-bold mb-4">Patient Profiles</h2>
         {profiles.length === 0 ? (
           <p className="text-muted-foreground text-sm">No profiles yet. Add one above.</p>
         ) : (
@@ -74,8 +74,8 @@ export default function SettingsPage() {
                 key={p.id}
                 className={`flex items-center justify-between p-4 rounded-xl border transition cursor-pointer ${
                   p.id === activeProfileId
-                    ? "border-primary bg-secondary"
-                    : "border-border hover:border-primary/40"
+                    ? "border-primary bg-primary/10"
+                    : "border-white/40 hover:border-primary/40"
                 }`}
                 onClick={() => setActiveProfileId(p.id)}
               >
@@ -103,13 +103,12 @@ export default function SettingsPage() {
         )}
       </div>
 
-      {/* Medications */}
       {/* Session Reminders */}
       <NotificationCard />
 
       {activeProfile && (
         <div className="medical-card-elevated">
-          <h2 className="font-display text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+          <h2 className="font-display text-lg font-bold mb-4 flex items-center gap-2">
             <Pill className="h-5 w-5 text-primary" /> Current Medications
           </h2>
           <p className="text-sm text-muted-foreground mb-4">Managing for: {activeProfile.name}</p>
@@ -120,7 +119,7 @@ export default function SettingsPage() {
               value={newMed}
               onChange={(e) => setNewMed(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleAddMed()}
-              className="flex-1 px-4 py-2.5 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className="flex-1 px-4 py-2.5 rounded-xl border border-white/60 bg-white/40 backdrop-blur-sm text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-[var(--ink-subtle)]"
             />
             <button
               onClick={handleAddMed}
@@ -137,7 +136,7 @@ export default function SettingsPage() {
               {activeProfile.medications.map((med) => (
                 <span
                   key={med}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary text-secondary-foreground text-sm font-medium"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium"
                 >
                   {med}
                   <button
@@ -199,14 +198,14 @@ function NotificationCard() {
 
   return (
     <div className="medical-card-elevated mb-6">
-      <h2 className="font-display text-lg font-bold text-foreground mb-4 flex items-center gap-2">
+      <h2 className="font-display text-lg font-bold mb-4 flex items-center gap-2">
         <Bell className="h-5 w-5 text-primary" /> 🔔 Session Reminders
       </h2>
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm text-foreground">Enable daily reminders</span>
         <button
           onClick={handleToggle}
-          className={`relative w-11 h-6 rounded-full transition ${enabled ? "bg-primary" : "bg-border"}`}
+          className={`relative w-11 h-6 rounded-full transition ${enabled ? "bg-primary" : "bg-muted"}`}
         >
           <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${enabled ? "translate-x-5" : ""}`} />
         </button>
@@ -219,7 +218,7 @@ function NotificationCard() {
             type="time"
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            className="w-full mt-1 px-3 py-2 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            className="w-full mt-1 px-3 py-2 rounded-xl border border-white/60 bg-white/40 backdrop-blur-sm text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
           />
         </div>
       )}

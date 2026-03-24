@@ -32,7 +32,7 @@ const SENSITIVITY_OPTIONS: { value: SkinSensitivity; label: string; emoji: strin
 ];
 
 function getFreqZone(freq: number) {
-  if (freq <= 10) return { label: "⚡ Acupuncture-like range (1–10 Hz)", color: "text-blue-600" };
+  if (freq <= 10) return { label: "⚡ Acupuncture-like range (1–10 Hz)", color: "text-primary" };
   if (freq <= 19) return { label: "— Between zones", color: "text-muted-foreground" };
   return { label: "✅ Conventional range (20–120 Hz)", color: "text-green-600" };
 }
@@ -118,14 +118,14 @@ export default function SessionSetup() {
 
   return (
     <div className="container max-w-2xl py-6 sm:py-10 px-4">
-      {/* Progress — sticky on mobile */}
-      <div className="sticky top-14 sm:top-16 z-10 bg-background py-2 -mx-4 px-4 mb-6 sm:mb-8">
+      {/* Progress */}
+      <div className="sticky top-14 sm:top-16 z-10 py-2 -mx-4 px-4 mb-6 sm:mb-8">
         <div className="flex items-center gap-2">
           {Array.from({ length: totalSteps }, (_, i) => i).map((s) => (
             <div key={s} className="flex-1">
               <div
                 className={`h-2 rounded-full transition-colors ${
-                  s <= step ? "gradient-medical-bg" : "bg-muted"
+                  s <= step ? "gradient-medical-bg" : "bg-white/40"
                 }`}
               />
             </div>
@@ -139,7 +139,7 @@ export default function SessionSetup() {
           <div>
             <div className="flex items-center gap-3 mb-2">
               <ShieldCheck className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
-              <h2 className="font-display text-xl sm:text-2xl font-bold text-foreground">🛡️ Pre-Session Safety Check</h2>
+              <h2 className="font-display text-xl sm:text-2xl font-bold">🛡️ Pre-Session Safety Check</h2>
             </div>
             <p className="text-muted-foreground text-sm mt-1 mb-4 sm:mb-6">Please confirm ALL safety criteria before proceeding.</p>
 
@@ -149,15 +149,15 @@ export default function SessionSetup() {
                   key={i}
                   className={`flex items-start gap-3 p-2.5 sm:p-4 rounded-xl border cursor-pointer transition ${
                     safetyChecks[i]
-                      ? "border-primary bg-secondary"
-                      : "border-border hover:border-primary/40"
+                      ? "border-primary bg-primary/10"
+                      : "border-white/40 hover:border-primary/40"
                   }`}
                 >
                   <input
                     type="checkbox"
                     checked={safetyChecks[i]}
                     onChange={() => toggleSafety(i)}
-                    className="mt-0.5 h-4 w-4 rounded border-border text-primary accent-primary"
+                    className="mt-0.5 h-4 w-4 rounded accent-[var(--accent-dark-hex)]"
                   />
                   <span className="text-sm text-foreground leading-relaxed">{label}</span>
                 </label>
@@ -176,7 +176,7 @@ export default function SessionSetup() {
         {/* Step 1: Patient Selection */}
         {step === 1 && (
           <div>
-            <h2 className="font-display text-xl sm:text-2xl font-bold text-foreground">Patient Selection</h2>
+            <h2 className="font-display text-xl sm:text-2xl font-bold">Patient Selection</h2>
             <p className="text-muted-foreground text-sm mt-1 mb-4 sm:mb-6">Select or create a patient profile before proceeding.</p>
 
             {profiles.length > 0 && (
@@ -187,8 +187,8 @@ export default function SessionSetup() {
                     onClick={() => setActiveProfileId(p.id)}
                     className={`w-full flex items-center gap-2 sm:gap-3 p-2.5 sm:p-4 rounded-xl border text-left transition ${
                       activeProfileId === p.id
-                        ? "border-primary bg-secondary text-secondary-foreground"
-                        : "border-border hover:border-primary/40 text-foreground"
+                        ? "border-primary bg-primary/10 text-foreground"
+                        : "border-white/40 hover:border-primary/40 text-foreground"
                     }`}
                   >
                     <User className="h-5 w-5 shrink-0 text-primary" />
@@ -201,20 +201,20 @@ export default function SessionSetup() {
               </div>
             )}
 
-            <div className="border-t border-border pt-4 sm:pt-5">
+            <div className="border-t border-white/40 pt-4 sm:pt-5">
               <p className="text-sm font-medium text-foreground mb-3">Create New Profile</p>
               <div className="space-y-3">
                 <input
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   placeholder="Patient Name"
-                  className="w-full p-3 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="w-full p-3 rounded-xl border border-white/60 bg-white/40 backdrop-blur-sm text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-[var(--ink-subtle)]"
                 />
                 <input
                   value={newCondition}
                   onChange={(e) => setNewCondition(e.target.value)}
                   placeholder="Primary Condition"
-                  className="w-full p-3 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="w-full p-3 rounded-xl border border-white/60 bg-white/40 backdrop-blur-sm text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-[var(--ink-subtle)]"
                 />
                 <button
                   onClick={handleCreateProfile}
@@ -231,13 +231,13 @@ export default function SessionSetup() {
         {/* Step 2: Pain Location */}
         {step === 2 && (
           <div>
-            <h2 className="font-display text-xl sm:text-2xl font-bold text-foreground">📍 Electrode Placement</h2>
+            <h2 className="font-display text-xl sm:text-2xl font-bold">📍 Electrode Placement</h2>
             <p className="text-muted-foreground text-sm mt-1 mb-4 sm:mb-6">Select where you want to apply the TENS electrodes.</p>
 
             <select
               value={config.placement}
               onChange={(e) => updateConfig({ placement: e.target.value })}
-              className="w-full p-3 rounded-xl border border-border bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring mb-4"
+              className="w-full p-3 rounded-xl border border-white/60 bg-white/40 backdrop-blur-sm text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring mb-4"
             >
               <option value="">Select location...</option>
               {LOCATIONS.map((loc) => (
@@ -252,8 +252,8 @@ export default function SessionSetup() {
                   onClick={() => updateConfig({ placement: loc })}
                   className={`p-3 rounded-xl border text-left text-sm font-medium transition ${
                     config.placement === loc
-                      ? "border-primary bg-secondary text-secondary-foreground"
-                      : "border-border hover:border-primary/40 text-foreground"
+                      ? "border-primary bg-primary/10 text-foreground"
+                      : "border-white/40 hover:border-primary/40 text-foreground"
                   }`}
                 >
                   {loc}
@@ -273,7 +273,7 @@ export default function SessionSetup() {
         {/* Step 3: Pain Type */}
         {step === 3 && (
           <div>
-            <h2 className="font-display text-xl sm:text-2xl font-bold text-foreground">Pain Type</h2>
+            <h2 className="font-display text-xl sm:text-2xl font-bold">Pain Type</h2>
             <p className="text-muted-foreground text-sm mt-1 mb-4 sm:mb-6">This determines the recommended TENS mode.</p>
 
             <div className="space-y-3">
@@ -281,8 +281,8 @@ export default function SessionSetup() {
                 onClick={() => updateConfig({ painType: "Acute" })}
                 className={`w-full p-4 sm:p-5 rounded-xl border text-left transition ${
                   config.painType === "Acute"
-                    ? "border-primary bg-secondary"
-                    : "border-border hover:border-primary/40"
+                    ? "border-primary bg-primary/10"
+                    : "border-white/40 hover:border-primary/40"
                 }`}
               >
                 <div className="font-semibold text-foreground">🦴 Acute / Musculoskeletal Pain</div>
@@ -294,8 +294,8 @@ export default function SessionSetup() {
                 onClick={() => updateConfig({ painType: "Chronic" })}
                 className={`w-full p-4 sm:p-5 rounded-xl border text-left transition ${
                   config.painType === "Chronic"
-                    ? "border-primary bg-secondary"
-                    : "border-border hover:border-primary/40"
+                    ? "border-primary bg-primary/10"
+                    : "border-white/40 hover:border-primary/40"
                 }`}
               >
                 <div className="font-semibold text-foreground">⚡ Chronic / Neuropathic Pain</div>
@@ -310,9 +310,9 @@ export default function SessionSetup() {
         {/* Step 4: Parameters */}
         {step === 4 && (
           <div>
-            <h2 className="font-display text-xl sm:text-2xl font-bold text-foreground">Parameters</h2>
+            <h2 className="font-display text-xl sm:text-2xl font-bold">Parameters</h2>
 
-            <div className="mt-3 mb-4 sm:mb-6 flex items-start gap-2 p-3 rounded-lg bg-secondary text-xs sm:text-sm">
+            <div className="mt-3 mb-4 sm:mb-6 flex items-start gap-2 p-3 rounded-lg bg-primary/5 text-xs sm:text-sm">
               <Info className="h-4 w-4 text-primary mt-0.5 shrink-0" />
               <span className="text-foreground">
                 Clinical recommendation applied. However, the patient's comfort is the ultimate metric—please adjust these parameters to your personal comfort level before starting.
@@ -328,10 +328,9 @@ export default function SessionSetup() {
                   max={config.painType === "Acute" ? 120 : 10}
                   onChange={(v) => updateConfig({ frequency: v })}
                 />
-                {/* Frequency zone bar */}
                 <div className="w-full h-2 rounded-full flex overflow-hidden mt-1">
-                  <div className="bg-blue-400" style={{ width: "7.6%" }} title="Acupuncture-like (1–10 Hz)" />
-                  <div className="bg-gray-300" style={{ width: "7.6%" }} title="Between zones (11–19 Hz)" />
+                  <div className="bg-primary/60" style={{ width: "7.6%" }} title="Acupuncture-like (1–10 Hz)" />
+                  <div className="bg-muted" style={{ width: "7.6%" }} title="Between zones (11–19 Hz)" />
                   <div className="bg-green-400" style={{ width: "84.8%" }} title="Conventional (20–120 Hz)" />
                 </div>
                 <p className={`text-xs mt-1 font-medium ${freqZone.color}`}>{freqZone.label}</p>
@@ -378,8 +377,8 @@ export default function SessionSetup() {
                       onClick={() => handleSkinSensitivity(opt.value)}
                       className={`p-2 sm:p-3 rounded-xl border text-center transition ${
                         skinSensitivity === opt.value
-                          ? "border-primary bg-secondary"
-                          : "border-border hover:border-primary/40"
+                          ? "border-primary bg-primary/10"
+                          : "border-white/40 hover:border-primary/40"
                       }`}
                     >
                       <div className="text-lg sm:text-xl mb-1">{opt.emoji}</div>
@@ -396,7 +395,7 @@ export default function SessionSetup() {
         {/* Step 5: Pain Rating */}
         {step === 5 && (
           <div>
-            <h2 className="font-display text-xl sm:text-2xl font-bold text-foreground">❤️ How is your pain right now?</h2>
+            <h2 className="font-display text-xl sm:text-2xl font-bold">❤️ How is your pain right now?</h2>
             <p className="text-muted-foreground text-sm mt-1 mb-4 sm:mb-6">Rate your current pain before starting therapy.</p>
 
             <div className="text-center">
@@ -407,7 +406,7 @@ export default function SessionSetup() {
                 max={10}
                 value={config.initialPain}
                 onChange={(e) => updateConfig({ initialPain: Number(e.target.value) })}
-                className="w-full accent-primary"
+                className="w-full accent-[var(--accent-dark-hex)]"
               />
               <div className="flex justify-between text-xs text-muted-foreground mt-1">
                 <span>0 — No Pain</span>
@@ -418,7 +417,7 @@ export default function SessionSetup() {
         )}
 
         {/* Navigation */}
-        <div className="flex justify-between mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-border">
+        <div className="flex justify-between mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-white/40">
           <button
             onClick={() => setStep((s) => s - 1)}
             disabled={step === 0}
@@ -476,7 +475,7 @@ function ParamSlider({
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full accent-primary"
+        className="w-full accent-[var(--accent-dark-hex)]"
       />
       <div className="flex justify-between text-xs text-muted-foreground mt-0.5">
         <span>{min}</span>

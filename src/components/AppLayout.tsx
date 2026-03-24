@@ -16,9 +16,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="no-print sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-md">
+      <header className="no-print sticky top-0 z-50 glass-header">
         <div className="container flex h-14 sm:h-16 items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2.5">
             <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg gradient-medical-bg">
@@ -37,8 +37,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   to={item.to}
                   className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     active
-                      ? "bg-secondary text-secondary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:text-foreground hover:bg-white/40"
                   }`}
                 >
                   <item.icon className="h-4 w-4" />
@@ -50,7 +50,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
           {/* Mobile toggle */}
           <button
-            className="md:hidden p-2 rounded-lg text-muted-foreground hover:bg-muted"
+            className="md:hidden p-2 rounded-lg text-muted-foreground hover:bg-white/40"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -59,7 +59,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile Nav */}
         {mobileOpen && (
-          <nav className="md:hidden border-t border-border bg-card p-3 space-y-1 max-h-[80vh] overflow-y-auto">
+          <nav className="md:hidden border-t border-white/30 bg-white/70 backdrop-blur-md p-3 space-y-1 max-h-[80vh] overflow-y-auto">
             {navItems.map((item) => {
               const active = location.pathname === item.to;
               return (
@@ -69,8 +69,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                   onClick={() => setMobileOpen(false)}
                   className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                     active
-                      ? "bg-secondary text-secondary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:text-foreground hover:bg-white/40"
                   }`}
                 >
                   <item.icon className="h-4 w-4" />

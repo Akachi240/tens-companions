@@ -1,0 +1,1 @@
+Design system: Ice Blue Glassmorphism. Primary=#2e6faa, Accent=#4a8fc4, Ink=#0f2340, Muted=#7a90a8, Subtle=#b0c4d8. Cormorant Garamond for display headings, Jost for all UI text. Cards use bg white/70 + backdrop-blur-md + border white/60. Full-bleed background image /blue-wave-bg.jpg. No dark mode. localStorage multi-profile EHR.

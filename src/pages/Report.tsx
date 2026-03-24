@@ -45,15 +45,14 @@ export default function Report() {
       </div>
 
       {/* Printable Content */}
-      <div className="bg-card rounded-xl border border-border p-8 print:border-0 print:shadow-none print:p-0">
-        <h1 className="font-display text-2xl font-bold text-foreground mb-1">TensPilot+ — Doctor's Report</h1>
+      <div className="medical-card-elevated print:border-0 print:shadow-none print:p-0 print:bg-white">
+        <h1 className="font-display text-2xl font-bold mb-1">TensPilot+ — Doctor's Report</h1>
         <p className="text-sm text-muted-foreground mb-6">Generated: {new Date().toLocaleDateString()}</p>
 
-        <hr className="border-border mb-6" />
+        <hr className="border-white/40 mb-6" />
 
-        {/* Patient Summary */}
         <section className="mb-8">
-          <h2 className="font-display text-lg font-bold text-foreground mb-3">Patient Summary</h2>
+          <h2 className="font-display text-lg font-bold mb-3">Patient Summary</h2>
           <div className="grid grid-cols-2 gap-y-2 text-sm">
             <div className="text-muted-foreground">Name</div>
             <div className="text-foreground font-medium">{activeProfile.name}</div>
@@ -66,35 +65,33 @@ export default function Report() {
           </div>
         </section>
 
-        {/* Analytics Summary */}
         <section className="mb-8">
-          <h2 className="font-display text-lg font-bold text-foreground mb-3">Analytics Summary</h2>
+          <h2 className="font-display text-lg font-bold mb-3">Analytics Summary</h2>
           <div className="grid grid-cols-3 gap-4">
-            <div className="p-4 rounded-xl bg-secondary border border-border text-center">
+            <div className="p-4 rounded-xl bg-white/50 backdrop-blur-sm border border-white/40 text-center">
               <p className="text-2xl font-display font-bold text-foreground">{totalSessions}</p>
               <p className="text-xs text-muted-foreground mt-1">Total Sessions</p>
             </div>
-            <div className="p-4 rounded-xl bg-secondary border border-border text-center">
+            <div className="p-4 rounded-xl bg-white/50 backdrop-blur-sm border border-white/40 text-center">
               <p className="text-2xl font-display font-bold text-foreground">{avgReduction} pts</p>
               <p className="text-xs text-muted-foreground mt-1">Avg Pain Reduction</p>
             </div>
-            <div className="p-4 rounded-xl bg-secondary border border-border text-center">
+            <div className="p-4 rounded-xl bg-white/50 backdrop-blur-sm border border-white/40 text-center">
               <p className="text-2xl font-display font-bold text-foreground">{avgReductionPct}%</p>
               <p className="text-xs text-muted-foreground mt-1">Avg Relief %</p>
             </div>
           </div>
         </section>
 
-        {/* Session History Table */}
         <section>
-          <h2 className="font-display text-lg font-bold text-foreground mb-3">Session History</h2>
+          <h2 className="font-display text-lg font-bold mb-3">Session History</h2>
           {sessions.length === 0 ? (
             <p className="text-sm text-muted-foreground">No sessions recorded.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-border text-left">
+                  <tr className="border-b border-white/40 text-left">
                     <th className="pb-2 font-medium text-muted-foreground">Date</th>
                     <th className="pb-2 font-medium text-muted-foreground">Location</th>
                     <th className="pb-2 font-medium text-muted-foreground">Type</th>
@@ -107,7 +104,7 @@ export default function Report() {
                 </thead>
                 <tbody>
                   {sessions.map((s, i) => (
-                    <tr key={i} className="border-b border-border last:border-0">
+                    <tr key={i} className="border-b border-white/30 last:border-0">
                       <td className="py-2 text-foreground">{new Date(s.date).toLocaleDateString()}</td>
                       <td className="py-2 text-foreground">{s.placement}</td>
                       <td className="py-2 text-foreground">{s.painType}</td>

@@ -59,7 +59,6 @@ export default function ActiveSession() {
   const secs = remaining % 60;
   const elapsed = Math.round((totalSeconds - remaining) / 60);
 
-  // Breathing cycle — only when paused
   const [breathPhase, setBreathPhase] = useState("Inhale");
   useEffect(() => {
     if (!running || !paused) return;
@@ -78,7 +77,6 @@ export default function ActiveSession() {
       : 0;
 
   const relief = getReliefTier(reductionPct);
-
   const arrow = reductionPct > 0 ? "↓" : reductionPct < 0 ? "↑" : "→";
 
   const saveSession = () => {
@@ -125,19 +123,17 @@ export default function ActiveSession() {
     return (
       <div className="container max-w-lg py-10 sm:py-16 px-4">
         <div className="medical-card-elevated text-center">
-          {/* Header */}
           <div className="flex justify-center mb-4">
             <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-green-100 border-2 border-green-500">
               <span className="text-green-600 text-xl sm:text-2xl">✓</span>
             </div>
           </div>
-          <h2 className="font-display text-lg sm:text-xl font-bold text-foreground mb-1">Session Complete!</h2>
+          <h2 className="font-display text-lg sm:text-xl font-bold mb-1">Session Complete!</h2>
           <p className="text-muted-foreground text-sm mb-1">{elapsed} minutes of therapy completed</p>
           <p className="text-sm text-muted-foreground mb-6 sm:mb-8">
             {config.frequency} Hz · {config.pulseWidth} µs
           </p>
 
-          {/* Pain Picker */}
           <div className="mb-5 sm:mb-6">
             <p className="text-sm font-medium text-foreground mb-3">How do you feel now? 🩺</p>
             <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
@@ -148,7 +144,7 @@ export default function ActiveSession() {
                   className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 font-semibold text-xs sm:text-sm transition ${
                     postPainLevel === n
                       ? "border-primary bg-primary text-primary-foreground"
-                      : "border-border bg-card text-foreground hover:border-primary"
+                      : "border-white/60 bg-white/40 text-foreground hover:border-primary"
                   }`}
                 >
                   {n}
@@ -157,7 +153,6 @@ export default function ActiveSession() {
             </div>
           </div>
 
-          {/* Live Reduction Badge */}
           {postPainLevel !== null && (
             <div className={`rounded-xl border-2 p-3 sm:p-4 text-center transition-all mb-5 sm:mb-6 ${relief.border} ${relief.bg}`}>
               <div className={`text-2xl sm:text-3xl font-bold tabular-nums reduction-pct ${relief.text}`}>
@@ -168,16 +163,14 @@ export default function ActiveSession() {
             </div>
           )}
 
-          {/* Notes */}
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Any side effects or notes..."
             rows={2}
-            className="w-full rounded-xl border border-border p-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring mb-5 sm:mb-6"
+            className="w-full rounded-xl border border-white/60 bg-white/40 backdrop-blur-sm p-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring mb-5 sm:mb-6"
           />
 
-          {/* Save */}
           <button
             onClick={saveSession}
             disabled={postPainLevel === null}
@@ -202,7 +195,6 @@ export default function ActiveSession() {
           {String(mins).padStart(2, "0")}:{String(secs).padStart(2, "0")}
         </div>
 
-        {/* Params — inline on mobile, hidden on sm+ */}
         <div className="flex sm:hidden flex-wrap justify-center gap-x-4 gap-y-1 text-xs text-muted-foreground mt-2">
           <span>Freq: {config.frequency} Hz</span>
           <span>PW: {config.pulseWidth} μs</span>
@@ -212,7 +204,6 @@ export default function ActiveSession() {
           {config.frequency} Hz · {config.pulseWidth} μs · {config.intensity} mA
         </p>
 
-        {/* Breathing circle — only when paused */}
         {paused && (
           <div className="mt-8 sm:mt-10 mb-6 sm:mb-8 flex flex-col items-center">
             <p className="text-xs sm:text-sm text-muted-foreground mb-2">{breathPhase}</p>
@@ -228,7 +219,7 @@ export default function ActiveSession() {
         <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-2 sm:gap-3 w-full">
           <button
             onClick={togglePause}
-            className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-border text-foreground font-semibold text-base hover:bg-muted transition"
+            className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-primary/40 bg-white/40 backdrop-blur-sm text-foreground font-semibold text-base hover:bg-white/60 transition"
           >
             {paused ? <Play className="h-5 w-5" /> : <Pause className="h-5 w-5" />}
             {paused ? "▶️ Resume Session" : "⏸ Pause Session"}
@@ -244,7 +235,6 @@ export default function ActiveSession() {
         </div>
       </div>
 
-      {/* Bottom status bar */}
       <div
         className={`fixed bottom-0 left-0 right-0 z-40 py-3 px-4 text-center text-sm font-medium ${
           paused
