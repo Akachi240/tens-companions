@@ -3,10 +3,13 @@ import { Zap } from "lucide-react";
 
 export default function Splash() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center text-center px-6">
+    <div
+      className="min-h-screen flex flex-col items-center justify-center text-center px-6 bg-cover bg-center"
+      style={{ backgroundImage: "url('/splash-bg.jpg')" }}
+    >
       {/* Logo */}
       <div className="w-14 h-14 rounded-2xl bg-white/50 backdrop-blur-md border border-white/60 flex items-center justify-center mb-3">
-        <Zap className="h-7 w-7 text-[var(--accent-hex)]" />
+        <Zap className="h-7 w-7 text-[hsl(var(--accent))]" />
       </div>
       <p className="text-lg font-medium mb-10" style={{ fontFamily: "'Jost', sans-serif", color: "var(--ink)" }}>
         TensPilot+

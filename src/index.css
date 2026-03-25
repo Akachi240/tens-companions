@@ -69,10 +69,6 @@
     font-family: 'Jost', system-ui, sans-serif;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     background-color: var(--background-fallback);
-    background-image: url('/blue-wave-bg.jpg');
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
   }
 
   h1, h2, h3, h4, h5, h6 {
