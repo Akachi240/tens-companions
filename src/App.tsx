@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { ProfileProvider } from "@/context/ProfileContext";
 import AppLayout from "@/components/AppLayout";
+import Splash from "./pages/Splash";
 import Index from "./pages/Index";
 import SessionSetup from "./pages/SessionSetup";
 import ActiveSession from "./pages/ActiveSession";
@@ -23,7 +24,8 @@ const App = () => (
       <BrowserRouter>
         <AppLayout>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<Splash />} />
+            <Route path="/home" element={<Index />} />
             <Route path="/session-setup" element={<SessionSetup />} />
             <Route path="/active-session" element={<ActiveSession />} />
             <Route path="/education" element={<Education />} />

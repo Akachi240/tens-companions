@@ -36,19 +36,19 @@ const bulletPoints = [
 ];
 
 const steps = [
-  { icon: Zap, label: "Setup", emoji: "⚡" },
-  { icon: Play, label: "Therapy", emoji: "🏃" },
-  { icon: BookOpen, label: "Learn", emoji: "📚" },
-  { icon: BarChart3, label: "Track", emoji: "📊" },
+  { icon: Zap, label: "Setup", description: "Configure your personalised TENS parameters" },
+  { icon: Play, label: "Run", description: "Run your session with real-time guidance" },
+  { icon: BookOpen, label: "Learn", description: "Learn the science behind TENS therapy" },
+  { icon: BarChart3, label: "Track", description: "Track progress and export clinical reports" },
 ];
 
 export default function Index() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="container py-8 md:py-24 text-center relative">
-          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium mb-6">
+      <section className="relative overflow-hidden min-h-screen sm:min-h-0">
+        <div className="container py-8 md:py-24 text-center relative flex flex-col justify-center min-h-screen sm:min-h-0">
+          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-primary/20 bg-primary/5 text-primary text-sm font-medium mb-6 mx-auto">
             <Zap className="h-4 w-4" />
             Clinical-Grade TENS Companion
           </div>
@@ -77,12 +77,12 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Feature Grid */}
-      <section className="container py-16">
+      {/* Feature Grid — hidden on mobile */}
+      <section className="container py-16 hidden sm:block">
         <h2 className="font-display text-2xl font-bold mb-8 text-center">
           Your Complete TENS Therapy Toolkit
         </h2>
-        <div className="hidden sm:grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
           {features.map((f) => (
             <Link
               key={f.to}
@@ -147,15 +147,18 @@ export default function Index() {
         </div>
       </section>
 
-      {/* How TENS Works — Mobile simplified */}
-      <section className="flex md:hidden flex-col gap-3 py-6 container">
-        <h2 className="font-display text-xl font-bold mb-1">How It Works</h2>
-        {steps.map((s) => (
-          <div key={s.label} className="flex items-center gap-3 text-sm text-muted-foreground">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--surface-tint)] text-primary shrink-0">
-              <s.icon className="h-4 w-4" />
+      {/* How It Works — Mobile vertical list */}
+      <section className="flex md:hidden flex-col gap-4 py-6 container">
+        <h2 className="font-display text-xl font-bold mb-2">How It Works</h2>
+        {steps.map((s, i) => (
+          <div key={s.label} className="flex items-start gap-4">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--surface-tint)] text-primary shrink-0 font-semibold text-sm">
+              {i + 1}
             </div>
-            <span className="text-foreground font-medium">{s.emoji} {s.label}</span>
+            <div>
+              <p className="text-foreground font-semibold text-sm">{s.label}</p>
+              <p className="text-muted-foreground text-xs mt-0.5">{s.description}</p>
+            </div>
           </div>
         ))}
       </section>
