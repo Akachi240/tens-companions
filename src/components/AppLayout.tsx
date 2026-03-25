@@ -3,7 +3,7 @@ import { Activity, Home, Zap, BookOpen, BarChart3, Settings, Menu, X } from "luc
 import { useState } from "react";
 
 const navItems = [
-  { to: "/", label: "Home", icon: Home },
+  { to: "/home", label: "Home", icon: Home },
   { to: "/session-setup", label: "Setup", icon: Zap },
   { to: "/active-session", label: "Therapy", icon: Activity },
   { to: "/education", label: "Education", icon: BookOpen },
@@ -15,12 +15,20 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const isSplash = location.pathname === "/";
+
+  // Splash page renders without the shell
+  if (isSplash) return <>{children}</>;
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div
+      className="min-h-screen flex flex-col bg-cover bg-center bg-fixed"
+      style={{ backgroundImage: "url('/app-bg.jpg')" }}
+    >
       {/* Header */}
       <header className="no-print sticky top-0 z-50 glass-header">
         <div className="container flex h-14 sm:h-16 items-center justify-between px-4">
-          <Link to="/" className="flex items-center gap-2.5">
+          <Link to="/home" className="flex items-center gap-2.5">
             <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg gradient-medical-bg">
               <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" />
             </div>
